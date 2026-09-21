@@ -1,10 +1,13 @@
+import { GENERIC_WHATSAPP_MESSAGE, whatsappUrl } from "@/lib/whatsapp";
+
 export function WhatsAppButton({ number }: { number: string }) {
-  const digits = number.replace(/\D/g, "");
-  if (!digits) return null;
+  const href = whatsappUrl(number, GENERIC_WHATSAPP_MESSAGE);
+  if (!href) return null;
 
   return (
     <a
-      href={`https://wa.me/${digits}?text=${encodeURIComponent("Hello Elite Escape, I'd like to plan a trip.")}`}
+      data-whatsapp-float
+      href={href}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat with us on WhatsApp"
