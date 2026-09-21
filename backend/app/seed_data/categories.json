@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Asia",
+    "slug": "asia",
+    "description": "Japan and Bali — city, culture and island itineraries.",
+    "image": "/packages/a-33.jpg",
+    "icon": "Palmtree",
+    "sort_order": 0
+  },
+  {
+    "name": "Europe",
+    "slug": "europe",
+    "description": "Paris, the United Kingdom and Russia's two capitals.",
+    "image": "/packages/paris.jpg",
+    "icon": "Landmark",
+    "sort_order": 1
+  },
+  {
+    "name": "Caucasus",
+    "slug": "caucasus",
+    "description": "Georgia and Armenia — mountains, monasteries and old cities.",
+    "image": "/packages/a-29.jpg",
+    "icon": "Mountain",
+    "sort_order": 2
+  }
+]

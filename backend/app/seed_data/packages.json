@@ -1,0 +1,483 @@
+[
+  {
+    "slug": "japan-tour-package",
+    "category": "asia",
+    "title": "Japan Tour Package",
+    "country": "Japan",
+    "duration": "7 Nights / 8 Days",
+    "currency": "AED",
+    "price_from": 4000,
+    "price_to": 5000,
+    "tour_types": [
+      "City Tour"
+    ],
+    "group_size": "10 persons",
+    "summary": "A journey that blends tradition with modernity across Tokyo, Kyoto, Nara and Osaka — historic temples, bamboo groves, deer parks and vibrant city life.",
+    "highlights": [
+      "Mount Fuji & Lake Ashi cruise",
+      "Fushimi Inari Shrine (red torii gates)",
+      "Arashiyama Bamboo Forest",
+      "Asakusa Temple & Nakamise Shopping",
+      "Osaka Castle & Dotonbori",
+      "Optional: kimono dress-up, tea ceremony, sushi-making, onsen visits"
+    ],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Arrival in Tokyo",
+        "description": "Airport transfer and hotel check-in, with optional evening activities."
+      },
+      {
+        "day": 2,
+        "title": "Tokyo City Tour",
+        "description": "Asakusa Temple, Tokyo Skytree/Tower, Meiji Shrine, Harajuku and Shinjuku."
+      },
+      {
+        "day": 3,
+        "title": "Mt. Fuji & Hakone Day Tour",
+        "description": "Mount Fuji 5th Station, Lake Ashi cruise and the Hakone Ropeway."
+      },
+      {
+        "day": 4,
+        "title": "Bullet Train to Kyoto",
+        "description": "Shinkansen ride to Kyoto, Fushimi Inari Shrine and the Gion district."
+      },
+      {
+        "day": 5,
+        "title": "Kyoto Cultural Tour",
+        "description": "Kinkaku-ji (Golden Pavilion), Arashiyama Bamboo Grove and an optional tea ceremony."
+      },
+      {
+        "day": 6,
+        "title": "Nara Day Trip + Transfer to Osaka",
+        "description": "Todai-ji Temple, Nara Deer Park and Kasuga Taisha Shrine, then on to Osaka."
+      },
+      {
+        "day": 7,
+        "title": "Osaka City Tour",
+        "description": "Osaka Castle, Umeda Sky Building, Dotonbori and Shinsaibashi."
+      },
+      {
+        "day": 8,
+        "title": "Departure",
+        "description": "Hotel check-out and airport transfer to Kansai International (KIX)."
+      }
+    ],
+    "inclusions": [
+      "Premium hotel accommodation",
+      "Daily breakfast",
+      "Airport transfers",
+      "Bullet train (Shinkansen) travel",
+      "Guided sightseeing tours"
+    ],
+    "exclusions": [],
+    "images": [
+      "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1400&q=80"
+    ],
+    "is_featured": true
+  },
+  {
+    "slug": "georgia-armenia",
+    "category": "caucasus",
+    "title": "Georgia & Armenia Tour Package",
+    "country": "Georgia & Armenia",
+    "duration": "7 Nights / 8 Days",
+    "currency": "AED",
+    "price_from": 2000,
+    "price_to": 2500,
+    "tour_types": [
+      "Adventure",
+      "City Tour",
+      "Hill Town"
+    ],
+    "group_size": "10 persons",
+    "summary": "Explore the hidden gems of the Caucasus — from Tbilisi's vibrant streets and snow-capped Kazbegi to ancient Armenian monasteries and Lake Sevan.",
+    "highlights": [
+      "Tbilisi city tour with cable car and Sulphur Baths",
+      "Georgian Military Highway and Gergeti Trinity Church",
+      "Border crossing assistance into Armenia",
+      "Yerevan city tour",
+      "Garni Temple, Geghard Monastery and Lake Sevan"
+    ],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Arrival in Tbilisi",
+        "description": "Airport transfer, hotel check-in and a free evening to explore."
+      },
+      {
+        "day": 2,
+        "title": "Tbilisi City Tour",
+        "description": "Holy Trinity Cathedral, Metekhi Church, Narikala Fortress, cable car ride, Sulphur Baths and the Bridge of Peace."
+      },
+      {
+        "day": 3,
+        "title": "Gudauri – Kazbegi",
+        "description": "Georgian Military Highway, Ananuri Fortress, Zhinvali Reservoir and Gergeti Trinity Church (optional 4x4)."
+      },
+      {
+        "day": 4,
+        "title": "Armenia Border Crossing – Yerevan",
+        "description": "Border assistance, vehicle and guide change, with a stop at Haghpat Monastery."
+      },
+      {
+        "day": 5,
+        "title": "Yerevan City Tour",
+        "description": "Republic Square, Cascade Complex, Matenadaran, Vernissage Market and Tsitsernakaberd Memorial."
+      },
+      {
+        "day": 6,
+        "title": "Garni – Geghard – Lake Sevan",
+        "description": "Garni Temple, Geghard Monastery and Sevanavank Monastery."
+      },
+      {
+        "day": 7,
+        "title": "Free Day in Yerevan",
+        "description": "Shopping, museums, or an optional wine / Khor Virap tour."
+      },
+      {
+        "day": 8,
+        "title": "Departure",
+        "description": "Hotel check-out and airport transfer."
+      }
+    ],
+    "inclusions": [
+      "Hotel accommodation",
+      "Daily breakfast",
+      "Guided tours",
+      "All transfers",
+      "Border formalities assistance"
+    ],
+    "exclusions": [],
+    "images": [
+      "/packages/a-29.jpg"
+    ],
+    "is_featured": false
+  },
+  {
+    "slug": "bali-tour-package",
+    "category": "asia",
+    "title": "Bali Tour Package",
+    "country": "Indonesia",
+    "duration": "6 Nights / 7 Days",
+    "currency": "AED",
+    "price_from": 1299,
+    "price_to": 1800,
+    "tour_types": [
+      "Adventure",
+      "City Tour",
+      "Couple",
+      "Escorted Tour",
+      "Family",
+      "Hill Town"
+    ],
+    "group_size": "15 persons",
+    "summary": "Bali's cultural heart in Ubud, the island scenery of Nusa Penida and the nightlife of Kuta & Seminyak — suited to honeymooners, families and independent travellers.",
+    "highlights": [
+      "Tegenungan Waterfall and Ubud Art Market",
+      "Monkey Forest and a Luwak coffee plantation visit",
+      "Nusa Penida tour — Broken Beach, Angel's Billabong, Kelingking Beach",
+      "Uluwatu Temple with a traditional Kecak Dance",
+      "Tanah Lot Temple sunset",
+      "Bali Swing photography",
+      "Optional water sports at Tanjung Benoa"
+    ],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Arrival in Bali – Kuta",
+        "description": "Airport transfer, hotel check-in and a free evening at Kuta Beach."
+      },
+      {
+        "day": 2,
+        "title": "Full-Day Ubud & Kintamani Tour",
+        "description": "Waterfalls, art markets, Monkey Forest, a coffee plantation and volcano views."
+      },
+      {
+        "day": 3,
+        "title": "Nusa Penida Island Tour",
+        "description": "Boat excursion to three beaches, lunch included."
+      },
+      {
+        "day": 4,
+        "title": "Uluwatu Temple + Sunset",
+        "description": "Temple visit, Kecak Dance and an optional beach dinner."
+      },
+      {
+        "day": 5,
+        "title": "Tanah Lot Temple & Bali Swing",
+        "description": "Bali Swing, Taman Ayun Temple and the iconic sea temple at sunset."
+      },
+      {
+        "day": 6,
+        "title": "Free Day",
+        "description": "Optional water sports, shopping or spa time."
+      },
+      {
+        "day": 7,
+        "title": "Departure",
+        "description": "Hotel check-out and airport transfer."
+      }
+    ],
+    "inclusions": [
+      "Hotel accommodation",
+      "Daily breakfast",
+      "Private transfers",
+      "Guided tours",
+      "Island-hopping adventures"
+    ],
+    "exclusions": [],
+    "images": [
+      "/packages/a-33.jpg"
+    ],
+    "is_featured": true
+  },
+  {
+    "slug": "russia-tour-package",
+    "category": "europe",
+    "title": "Russia Tour Package",
+    "country": "Russia",
+    "duration": "7 Nights / 8 Days",
+    "currency": "AED",
+    "price_from": 2400,
+    "price_to": 3000,
+    "tour_types": [
+      "Adventure",
+      "City Tour",
+      "Couple",
+      "Escorted Tour"
+    ],
+    "group_size": "10 persons",
+    "summary": "An 8-day tour of Moscow and St. Petersburg — iconic landmarks, imperial palaces, a high-speed train between the capitals and English-speaking guides.",
+    "highlights": [
+      "Red Square, St. Basil's Cathedral and Lenin's Mausoleum",
+      "Kremlin grounds & cathedrals",
+      "Moscow's underground metro stations",
+      "Hermitage Museum (Winter Palace)",
+      "Peterhof Palace and Lower Gardens",
+      "Church of the Savior on Spilled Blood",
+      "Optional Catherine Palace visit"
+    ],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Arrival in Moscow",
+        "description": "Airport transfer, hotel check-in and an optional evening walk."
+      },
+      {
+        "day": 2,
+        "title": "Moscow City Tour",
+        "description": "Red Square, St. Basil's, the Kremlin, Sparrow Hills and Arbat Street."
+      },
+      {
+        "day": 3,
+        "title": "Metro Tour + Free Time",
+        "description": "Metro stations tour, with optional markets and parks in your free time."
+      },
+      {
+        "day": 4,
+        "title": "High-Speed Train to St. Petersburg",
+        "description": "Sapsan train journey, hotel transfer and a walk along Nevsky Prospect."
+      },
+      {
+        "day": 5,
+        "title": "St. Petersburg City Tour",
+        "description": "Hermitage Museum, cathedrals, Palace Square and Peter and Paul Fortress."
+      },
+      {
+        "day": 6,
+        "title": "Peterhof Palace & Gardens",
+        "description": "Day trip to Peterhof, the Lower Gardens and the Grand Palace."
+      },
+      {
+        "day": 7,
+        "title": "Free Day or Optional Tour",
+        "description": "Optional Catherine Palace visit or a canal cruise."
+      },
+      {
+        "day": 8,
+        "title": "Departure",
+        "description": "Hotel check-out and airport transfer."
+      }
+    ],
+    "inclusions": [
+      "4-star hotel accommodation",
+      "Daily breakfast",
+      "City tours with expert guides",
+      "High-speed train travel",
+      "Meet and greet service"
+    ],
+    "exclusions": [],
+    "images": [
+      "/packages/a-37.jpg"
+    ],
+    "is_featured": true
+  },
+  {
+    "slug": "uk-tour-package",
+    "category": "europe",
+    "title": "UK Tour Package",
+    "country": "United Kingdom",
+    "duration": "7 Nights / 8 Days",
+    "currency": "AED",
+    "price_from": 4100,
+    "price_to": 5000,
+    "tour_types": [
+      "City Tour",
+      "Couple",
+      "Escorted Tour",
+      "Family"
+    ],
+    "group_size": "10 persons",
+    "summary": "Royal heritage, historic landmarks and countryside scenery across London, Windsor, Oxford, Stonehenge, Bath and Edinburgh.",
+    "highlights": [
+      "Big Ben, Westminster Abbey, London Eye, Tower of London and Buckingham Palace",
+      "Changing of the Guard ceremony and Tower Bridge",
+      "Windsor Castle",
+      "Stonehenge",
+      "Roman Baths and the city of Bath",
+      "Oxford University and Cotswolds villages",
+      "Edinburgh Castle, Holyrood Palace and Arthur's Seat",
+      "Optional Warner Bros Studio Tour (Harry Potter)"
+    ],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Arrival in London",
+        "description": "Airport transfer, with the evening free for shopping or a Thames cruise."
+      },
+      {
+        "day": 2,
+        "title": "London City Tour",
+        "description": "Guided tour of Big Ben, Westminster, the London Eye, Tower of London, Buckingham Palace and the Guard ceremony."
+      },
+      {
+        "day": 3,
+        "title": "Windsor, Stonehenge & Bath",
+        "description": "Windsor Castle, Stonehenge and the Roman Baths."
+      },
+      {
+        "day": 4,
+        "title": "Oxford & Cotswolds",
+        "description": "Oxford University colleges and traditional English villages."
+      },
+      {
+        "day": 5,
+        "title": "Free Day / Optional Studio Tour",
+        "description": "Shopping at Oxford Street or Harrods, or the optional Harry Potter studio tour."
+      },
+      {
+        "day": 6,
+        "title": "London to Edinburgh",
+        "description": "High-speed train to Scotland and a walk along the Royal Mile."
+      },
+      {
+        "day": 7,
+        "title": "Edinburgh City Tour",
+        "description": "Edinburgh Castle, Holyrood Palace, Arthur's Seat and museums."
+      },
+      {
+        "day": 8,
+        "title": "Departure",
+        "description": "Hotel check-out and airport transfer."
+      }
+    ],
+    "inclusions": [
+      "3/4-star hotel stays",
+      "Daily breakfast",
+      "Guided sightseeing tours",
+      "Intercity train travel (London – Edinburgh)",
+      "Comfortable transfers"
+    ],
+    "exclusions": [
+      "International flights",
+      "Optional activities (Thames cruise, Warner Bros tour)",
+      "Meals beyond breakfast",
+      "Travel insurance",
+      "Personal expenses"
+    ],
+    "images": [
+      "/packages/a-41.jpg"
+    ],
+    "is_featured": true
+  },
+  {
+    "slug": "paris-france-tour-package",
+    "category": "europe",
+    "title": "Paris, France Tour Package",
+    "country": "France",
+    "duration": "5 Nights / 6 Days",
+    "currency": "AED",
+    "price_from": 5000,
+    "price_to": 6000,
+    "tour_types": [
+      "Adventure",
+      "City Tour",
+      "Couple",
+      "Escorted Tour",
+      "Family"
+    ],
+    "group_size": "10 persons",
+    "summary": "Paris's most iconic landmarks — the Eiffel Tower, the Louvre, Montmartre and Versailles — with optional Disneyland Paris.",
+    "highlights": [
+      "Eiffel Tower (2nd level access)",
+      "Louvre Museum with skip-the-line entry",
+      "Arc de Triomphe & Champs-Élysées",
+      "Versailles Palace & Hall of Mirrors",
+      "Montmartre & Sacré-Cœur Basilica",
+      "Seine River Cruise",
+      "Optional Moulin Rouge cabaret show",
+      "Optional Disneyland Paris"
+    ],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Arrival in Paris",
+        "description": "Airport arrival, private transfer and an optional Seine River Cruise."
+      },
+      {
+        "day": 2,
+        "title": "Paris City Tour + Eiffel Tower",
+        "description": "Guided tour of the Eiffel Tower, Arc de Triomphe, Champs-Élysées and Notre-Dame, with a leisure afternoon."
+      },
+      {
+        "day": 3,
+        "title": "Louvre Museum & Montmartre",
+        "description": "Louvre visit with skip-the-line access and Montmartre exploration; optional Moulin Rouge."
+      },
+      {
+        "day": 4,
+        "title": "Versailles Palace Tour",
+        "description": "Royal apartments and the Hall of Mirrors, with free time in the afternoon."
+      },
+      {
+        "day": 5,
+        "title": "Optional Disneyland / Leisure Day",
+        "description": "Full-day Disneyland Paris visit, or leisure shopping and relaxation."
+      },
+      {
+        "day": 6,
+        "title": "Departure",
+        "description": "Hotel check-out and airport transfer."
+      }
+    ],
+    "inclusions": [
+      "Hotel accommodation (5 nights)",
+      "Daily breakfast",
+      "City tours with guided services",
+      "Seine River Cruise",
+      "Private airport transfers",
+      "Skip-the-line Louvre entry"
+    ],
+    "exclusions": [
+      "Optional Disneyland Paris tickets",
+      "Optional Moulin Rouge cabaret show",
+      "Personal expenses and shopping",
+      "Travel insurance"
+    ],
+    "images": [
+      "/packages/paris.jpg"
+    ],
+    "is_featured": true
+  }
+]
