@@ -4,35 +4,54 @@ import { CTASection } from "@/components/home/CTASection";
 import { FAQ } from "@/components/home/FAQ";
 import { PageHero } from "@/components/layout/PageHero";
 import { Reveal } from "@/components/motion/Reveal";
+import { SectionHeader } from "@/components/motion/SectionHeader";
 import { TiltCard } from "@/components/motion/TiltCard";
+import { Button } from "@/components/ui/Button";
 import { VisaExplorer } from "@/components/visa/VisaExplorer";
+import { VisaStamps } from "@/components/visa/VisaStamps";
 import { getVisaCountries } from "@/lib/data";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Global Visa Assistance | Elite Escape Tourism",
+export const metadata: Metadata = pageMetadata({
+  title: "Visa Assistance",
   description:
     "Visa assistance for travelers, arranged alongside your holiday booking or as a standalone service. Tell us your destination and we'll guide you through the process.",
-};
+  path: "/global-visa",
+});
 
 const STEPS = [
   {
     step: "01",
-    title: "Tell us where you're headed",
+    title: "Initial Consultation",
     description:
-      "Share your destination and travel dates and we'll confirm what your passport needs.",
+      "Share your destination and travel dates so we can understand your travel requirements.",
   },
   {
     step: "02",
-    title: "We help prepare your documents",
+    title: "Document Preparation",
     description:
-      "Our visa team guides you through the forms, appointments and document checklist.",
+      "We guide you through the forms, appointments and the document checklist for your case.",
   },
   {
     step: "03",
-    title: "Submit and follow up",
+    title: "Application Submission",
     description:
-      "We help you submit a complete application and keep you updated. The decision rests with the embassy or consulate.",
+      "We assist with the application process where applicable, so your file is complete and accurate.",
   },
+  {
+    step: "04",
+    title: "Application Tracking",
+    description:
+      "We keep you updated as your application progresses. The decision rests with the embassy or consulate.",
+  },
+] as const;
+
+// UAE visa services listed on the live eliteescapetourism.com visa page. No fees or timelines are
+// published, so none are shown; they are confirmed with each applicant.
+const UAE_SERVICES = [
+  { name: "Tourist Visa", detail: "30-day and 90-day options" },
+  { name: "Business & Investor Visa", detail: "For business travel and investment" },
+  { name: "Transit Visa", detail: "48-hour and 96-hour options" },
 ] as const;
 
 const VISA_FAQS = [
@@ -64,13 +83,14 @@ export default async function GlobalVisaPage() {
   return (
     <>
       <PageHero
-        eyebrow="Global Visa"
-        title="Visa assistance, handled end to end"
-        description="Documents, appointments, and follow-up — with a real visa team guiding you, not a form you fill out alone."
+        eyebrow="Visa Assistance"
+        title="Visa Assistance Made Simpler"
+        description="From document preparation to application guidance, our team helps make your visa journey clearer and more organized."
+        decor={<VisaStamps />}
       />
 
       <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {STEPS.map((item, i) => (
             <Reveal key={item.step} delay={i * 0.1}>
               <TiltCard className="h-full rounded-2xl">
@@ -81,7 +101,10 @@ export default async function GlobalVisaPage() {
                   >
                     {item.step}
                   </span>
-                  <h3 className="relative font-serif text-lg font-semibold text-text-ink">
+                  <p className="relative text-xs font-semibold tracking-[0.2em] text-brand-blue">
+                    STEP {item.step}
+                  </p>
+                  <h3 className="relative mt-2 font-serif text-lg font-semibold text-text-ink">
                     {item.title}
                   </h3>
                   <p className="relative mt-2 text-sm leading-relaxed text-text-muted">
@@ -95,18 +118,34 @@ export default async function GlobalVisaPage() {
       </section>
 
       <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
-        <Reveal className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-widest text-brand-blue">
-            Destinations
-          </p>
-          <h2 className="mt-3 font-serif text-3xl font-semibold text-text-ink sm:text-4xl">
-            Where we can help
-          </h2>
-          <p className="mt-4 text-text-muted">
-            Choose your destination to start an enquiry. Fees and timelines are confirmed
-            with you directly, because they depend on your passport and circumstances.
-          </p>
-        </Reveal>
+        <SectionHeader
+          eyebrow="UAE visas"
+          title="UAE visa services"
+          description="Assistance with UAE visas, for visitors and for those doing business in the country."
+        />
+        <ul className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-3">
+          {UAE_SERVICES.map((service, i) => (
+            <li key={service.name}>
+              <Reveal delay={i * 0.1}>
+                <div className="h-full rounded-2xl border border-line/10 bg-white p-7 shadow-sm shadow-brand-blue/5">
+                  <h3 className="font-serif text-lg font-semibold text-text-ink">{service.name}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-text-muted">{service.detail}</p>
+                </div>
+              </Reveal>
+            </li>
+          ))}
+        </ul>
+        <div className="mt-10 flex justify-center">
+          <Button href="/contact?topic=Visa%20assistance">Get Visa Assistance</Button>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
+        <SectionHeader
+          eyebrow="Destinations"
+          title="Where we can help"
+          description="Choose your destination to start an enquiry. Fees and timelines are confirmed with you directly, because they depend on your passport and circumstances."
+        />
 
         <div className="mt-12">
           <VisaExplorer countries={countries} />

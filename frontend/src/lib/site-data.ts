@@ -86,7 +86,7 @@ export const PACKAGES = [
     price_to: 5000,
     tour_types: ["City Tour"],
     group_size: "10 persons",
-    image: IMG.cityscape,
+    image: "/packages/a-25.jpg",
     gallery: [],
     summary:
       "A journey that blends tradition with modernity across Tokyo, Kyoto, Nara and Osaka — historic temples, bamboo groves, deer parks and vibrant city life.",
