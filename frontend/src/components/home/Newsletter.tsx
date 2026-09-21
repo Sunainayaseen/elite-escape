@@ -89,7 +89,7 @@ export function Newsletter() {
             <button
               type="submit"
               disabled={status === "submitting"}
-              className="shrink-0 rounded-full bg-brand-blue px-6 py-3 text-sm font-semibold text-white transition-colors duration-200 hover:bg-brand-teal disabled:opacity-70"
+              className="shrink-0 rounded-full bg-brand-blue-strong px-6 py-3 text-sm font-semibold text-white transition-colors duration-200 hover:bg-brand-navy-accent disabled:opacity-70"
             >
               {status === "submitting" ? "Subscribing..." : "Subscribe"}
             </button>

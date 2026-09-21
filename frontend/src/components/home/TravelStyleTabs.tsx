@@ -48,7 +48,7 @@ export function TravelStyleTabs() {
             className={cn(
               "rounded-full px-5 py-2.5 text-sm font-medium transition-colors duration-200",
               active === s.key
-                ? "bg-brand-blue text-white shadow-md shadow-brand-blue/25"
+                ? "bg-brand-blue-strong text-white shadow-md shadow-brand-blue/25"
                 : "text-text-muted hover:bg-bg-navy-light hover:text-text-ink",
             )}
           >

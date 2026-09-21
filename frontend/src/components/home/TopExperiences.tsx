@@ -41,7 +41,7 @@ export function TopExperiences({
             className={cn(
               "rounded-full px-4 py-2 text-sm font-medium transition-colors duration-200",
               active === cat.slug
-                ? "bg-brand-blue text-white shadow-md shadow-brand-blue/25"
+                ? "bg-brand-blue-strong text-white shadow-md shadow-brand-blue/25"
                 : "text-text-muted hover:bg-bg-navy-light hover:text-text-ink",
             )}
           >
@@ -91,7 +91,7 @@ export function TopExperiences({
                       </>
                     )}
                   </div>
-                  <p className="font-serif text-base font-semibold text-brand-blue">
+                  <p className="font-serif text-base font-semibold text-brand-blue-strong">
                     {formatPrice(pkg)}
                   </p>
                 </div>

@@ -98,7 +98,7 @@ export default async function CategoryPage({
               className={cn(
                 "rounded-full border px-4 py-2 text-sm font-medium transition-colors duration-200",
                 cat.slug === category.slug
-                  ? "border-brand-blue bg-brand-blue text-white"
+                  ? "border-brand-blue-strong bg-brand-blue-strong text-white"
                   : "border-line/15 bg-white text-text-muted hover:border-brand-blue/40 hover:text-text-ink",
               )}
             >

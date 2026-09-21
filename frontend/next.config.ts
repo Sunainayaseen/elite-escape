@@ -47,7 +47,13 @@ const nextConfig: NextConfig = {
       { source: "/uploads/:path*", destination: `${API_ORIGIN}/uploads/:path*` },
     ];
   },
+  // Inlining the (small) stylesheet removes the render-blocking CSS request.
+  experimental: { inlineCss: true },
   images: {
+    // AVIF first, WebP fallback: much smaller than the JPEG/PNG originals. Optimised images are
+    // cached for a year because package photos and Unsplash URLs never change in place.
+    formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 60 * 60 * 24 * 365,
     remotePatterns: [
       {
         protocol: "https",

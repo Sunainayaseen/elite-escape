@@ -31,13 +31,13 @@ export function PackageCard({ pkg }: { pkg: Package }) {
       </Link>
 
       <div className="flex flex-1 flex-col p-5">
-        <p className="text-xs font-semibold uppercase tracking-wide text-brand-blue">
+        <p className="text-xs font-semibold uppercase tracking-wide text-brand-blue-strong">
           {pkg.country}
         </p>
         <h3 className="mt-1.5 font-serif text-xl font-semibold text-text-ink">
           <Link
             href={href}
-            className="hover:text-brand-blue focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-teal-light"
+            className="hover:text-brand-blue-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-teal-light"
           >
             {pkg.title}
           </Link>

@@ -149,7 +149,7 @@ export function TripPlanner({ packages }: { packages: Package[] }) {
 
           <button
             type="submit"
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-navy-accent px-6 py-3 text-sm font-semibold text-white transition-colors duration-300 hover:bg-brand-blue focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-teal-light sm:col-span-2 lg:col-span-1"
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-navy-accent px-6 py-3 text-sm font-semibold text-white transition-colors duration-300 hover:bg-brand-blue-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-teal-light sm:col-span-2 lg:col-span-1"
           >
             Plan My Trip
             <ArrowRight size={16} aria-hidden="true" />

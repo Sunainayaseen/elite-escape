@@ -94,14 +94,11 @@ export default async function GlobalVisaPage() {
           {STEPS.map((item, i) => (
             <Reveal key={item.step} delay={i * 0.1}>
               <TiltCard className="h-full rounded-2xl">
-                <div className="relative h-full overflow-hidden rounded-2xl border border-line/10 bg-white p-7 shadow-sm shadow-brand-blue/5">
-                  <span
-                    aria-hidden
-                    className="pointer-events-none absolute -right-1 -top-3 select-none font-serif text-6xl font-bold text-bg-navy-light/70"
-                  >
-                    {item.step}
-                  </span>
-                  <p className="relative text-xs font-semibold tracking-[0.2em] text-brand-blue">
+                <div
+                  data-step={item.step}
+                  className="relative h-full overflow-hidden rounded-2xl border border-line/10 bg-white p-7 shadow-sm shadow-brand-blue/5 before:pointer-events-none before:absolute before:-right-1 before:-top-3 before:select-none before:font-serif before:text-6xl before:font-bold before:text-bg-navy-light/70 before:content-[attr(data-step)]"
+                >
+                  <p className="relative text-xs font-semibold tracking-[0.2em] text-brand-blue-strong">
                     STEP {item.step}
                   </p>
                   <h3 className="relative mt-2 font-serif text-lg font-semibold text-text-ink">

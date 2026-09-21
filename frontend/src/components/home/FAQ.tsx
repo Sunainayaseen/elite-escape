@@ -56,7 +56,7 @@ export function FAQ({
                     <span
                       className={cn(
                         "text-sm font-semibold transition-colors duration-200 sm:text-base",
-                        isOpen ? "text-brand-blue" : "text-text-ink",
+                        isOpen ? "text-brand-blue-strong" : "text-text-ink",
                       )}
                     >
                       {faq.question}

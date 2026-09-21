@@ -6,6 +6,9 @@
 
   /* Elite Escape brand palette, extracted from the logo — light theme */
   --color-brand-blue: #2890BD;
+  /* Same hue, ~16% darker. Used ONLY where WCAG AA needs it: small blue text and white-on-blue
+     fills (4.88:1 on white). Decoration, icons, borders and glows stay on the logo blue. */
+  --color-brand-blue-strong: #22799F;
   --color-brand-teal: #27B3CF;
   --color-brand-navy-accent: #2A4596;
   --color-brand-teal-light: #1AA8D8;
@@ -27,6 +30,7 @@
   --color-foreground: var(--foreground);
 
   --color-brand-blue: var(--color-brand-blue);
+  --color-brand-blue-strong: var(--color-brand-blue-strong);
   --color-brand-teal: var(--color-brand-teal);
   --color-brand-navy-accent: var(--color-brand-navy-accent);
   --color-brand-teal-light: var(--color-brand-teal-light);

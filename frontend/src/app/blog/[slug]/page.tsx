@@ -39,7 +39,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   return (
     <>
       <article className="mx-auto max-w-3xl px-6 pb-16 pt-32 sm:pt-40">
-        <Link href="/blog" className="text-sm font-medium text-brand-blue hover:underline">
+        <Link href="/blog" className="text-sm font-medium text-brand-blue-strong hover:underline">
           ← All articles
         </Link>
         <p className="mt-6 text-xs text-text-muted">

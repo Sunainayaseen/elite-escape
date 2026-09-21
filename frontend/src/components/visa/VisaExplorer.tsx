@@ -48,7 +48,7 @@ export function VisaExplorer({ countries }: { countries: readonly VisaCountry[] 
           Don&apos;t see your destination? We can still help —{" "}
           <Link
             href="/contact?topic=Visa%20assistance"
-            className="font-medium text-brand-blue hover:underline"
+            className="font-medium text-brand-blue-strong hover:underline"
           >
             tell us where you&apos;re headed
           </Link>
@@ -88,7 +88,7 @@ export function VisaExplorer({ countries }: { countries: readonly VisaCountry[] 
                 </div>
                 <Link
                   href={`/contact?topic=${encodeURIComponent(`Visa assistance for ${country.country_name}`)}`}
-                  className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-brand-blue transition-colors hover:text-brand-teal"
+                  className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-brand-blue-strong transition-colors hover:text-brand-navy-accent"
                 >
                   Enquire
                   <ArrowUpRight

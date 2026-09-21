@@ -51,7 +51,7 @@ export default function AboutPage() {
       <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
           <Reveal x={-40} y={0}>
-            <p className="text-xs font-semibold uppercase tracking-widest text-brand-blue">
+            <p className="text-xs font-semibold uppercase tracking-widest text-brand-blue-strong">
               Our story
             </p>
             <h2 className="mt-3 font-serif text-3xl font-semibold text-text-ink sm:text-4xl">
@@ -103,7 +103,7 @@ export default function AboutPage() {
 
       <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
         <Reveal className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-widest text-brand-blue">
+          <p className="text-xs font-semibold uppercase tracking-widest text-brand-blue-strong">
             What we do
           </p>
           <h2 className="mt-3 font-serif text-3xl font-semibold text-text-ink sm:text-4xl">
@@ -137,7 +137,7 @@ export default function AboutPage() {
 
       <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
         <Reveal className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-widest text-brand-blue">
+          <p className="text-xs font-semibold uppercase tracking-widest text-brand-blue-strong">
             Where to find us
           </p>
           <h2 className="mt-3 font-serif text-3xl font-semibold text-text-ink sm:text-4xl">
@@ -165,7 +165,7 @@ export default function AboutPage() {
                     <a
                       key={phone}
                       href={`tel:${phone.replace(/\s+/g, "")}`}
-                      className="flex items-center gap-2 text-sm text-text-muted transition-colors hover:text-brand-blue"
+                      className="flex items-center gap-2 text-sm text-text-muted transition-colors hover:text-brand-blue-strong"
                     >
                       <Phone size={13} className="text-brand-blue" />
                       {phone}

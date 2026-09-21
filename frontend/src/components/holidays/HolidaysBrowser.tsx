@@ -45,7 +45,7 @@ export function HolidaysBrowser({
           className={cn(
             "shrink-0 rounded-full border px-4 py-2 text-sm font-medium transition-colors duration-200",
             active === "all"
-              ? "border-brand-blue bg-brand-blue text-white"
+              ? "border-brand-blue-strong bg-brand-blue-strong text-white"
               : "border-line/15 bg-white text-text-muted hover:border-brand-blue/40 hover:text-text-ink",
           )}
         >
@@ -59,7 +59,7 @@ export function HolidaysBrowser({
             className={cn(
               "shrink-0 rounded-full border px-4 py-2 text-sm font-medium transition-colors duration-200",
               active === cat.slug
-                ? "border-brand-blue bg-brand-blue text-white"
+                ? "border-brand-blue-strong bg-brand-blue-strong text-white"
                 : "border-line/15 bg-white text-text-muted hover:border-brand-blue/40 hover:text-text-ink",
             )}
           >

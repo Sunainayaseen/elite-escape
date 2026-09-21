@@ -63,7 +63,7 @@ export default async function ContactPage({
                     <a
                       key={phone}
                       href={`tel:${phone.replace(/\s+/g, "")}`}
-                      className="flex items-center gap-2 text-sm text-text-muted transition-colors hover:text-brand-blue"
+                      className="flex items-center gap-2 text-sm text-text-muted transition-colors hover:text-brand-blue-strong"
                     >
                       <Phone size={13} className="text-brand-blue" />
                       {phone}
@@ -76,7 +76,7 @@ export default async function ContactPage({
             <div className="flex flex-col gap-3 rounded-2xl border border-line/10 bg-bg-navy-light p-6">
               <a
                 href={`mailto:${CONTACT_EMAIL}`}
-                className="flex items-center gap-2.5 text-sm text-text-ink transition-colors hover:text-brand-blue"
+                className="flex items-center gap-2.5 text-sm text-text-ink transition-colors hover:text-brand-blue-strong"
               >
                 <Mail size={16} className="text-brand-blue" />
                 {CONTACT_EMAIL}

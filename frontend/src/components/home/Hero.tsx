@@ -30,6 +30,7 @@ export function Hero() {
                 alt="Overwater villas in a turquoise lagoon"
                 fill
                 priority
+                fetchPriority="high"
                 sizes="100vw"
                 className="object-cover"
               />

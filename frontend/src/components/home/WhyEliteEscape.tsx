@@ -11,7 +11,7 @@ export function WhyEliteEscape() {
     <section className="mx-auto max-w-7xl px-6 py-20 sm:py-28">
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
         <Reveal x={-40} y={0}>
-          <p className="text-xs font-semibold uppercase tracking-widest text-brand-blue">
+          <p className="text-xs font-semibold uppercase tracking-widest text-brand-blue-strong">
             About us
           </p>
           <SplitText

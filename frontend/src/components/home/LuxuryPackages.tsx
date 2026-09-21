@@ -17,7 +17,7 @@ export function LuxuryPackages({ packages }: { packages: readonly Package[] }) {
     <section className="mx-auto max-w-7xl px-6 py-20 sm:py-28">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <Reveal>
-          <p className="text-xs font-semibold uppercase tracking-widest text-brand-blue">
+          <p className="text-xs font-semibold uppercase tracking-widest text-brand-blue-strong">
             Featured
           </p>
         </Reveal>

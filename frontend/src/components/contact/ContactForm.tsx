@@ -95,7 +95,7 @@ export function ContactForm({ defaultMessage = "" }: { defaultMessage?: string }
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="neon-glow group mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-brand-blue px-6 py-3 text-sm font-semibold text-white hover:-translate-y-0.5 hover:bg-brand-teal active:translate-y-0 disabled:opacity-70"
+        className="neon-glow group mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-brand-blue-strong px-6 py-3 text-sm font-semibold text-white hover:-translate-y-0.5 hover:bg-brand-navy-accent active:translate-y-0 disabled:opacity-70"
       >
         {status === "submitting" ? (
           <>
