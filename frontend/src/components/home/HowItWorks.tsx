@@ -2,6 +2,7 @@ import { ArrowRight } from "lucide-react";
 import { Fragment } from "react";
 
 import { Reveal } from "@/components/motion/Reveal";
+import { SectionHeader } from "@/components/motion/SectionHeader";
 import { TiltCard } from "@/components/motion/TiltCard";
 import { HOW_IT_WORKS } from "@/lib/site-data";
 
@@ -20,14 +21,7 @@ export function HowItWorks() {
       />
 
       <div className="relative mx-auto max-w-7xl px-6">
-        <Reveal className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-widest text-brand-blue">
-            How it works
-          </p>
-          <h2 className="mt-3 font-serif text-3xl font-semibold text-text-ink sm:text-4xl">
-            Three steps to your next trip
-          </h2>
-        </Reveal>
+        <SectionHeader eyebrow="How it works" title="Three steps to your next trip" />
 
         <div className="mt-20 flex flex-col gap-10 lg:mt-24 lg:flex-row lg:items-center lg:gap-0">
           {HOW_IT_WORKS.map((item, i) => {
@@ -35,7 +29,7 @@ export function HowItWorks() {
             return (
               <Fragment key={item.step}>
                 <div className={`lg:flex-1 ${STAGGER_Y[i] ?? ""}`}>
-                  <Reveal delay={i * 0.15} x={-56} y={0}>
+                  <Reveal delay={i * 0.14} y={36} scale={0.97}>
                     <TiltCard className="h-full rounded-2xl">
                       <div className="group relative h-full overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-[#101c30] to-[#080f1c] p-7 shadow-xl shadow-[#080f1c]/20 transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-teal-light/30 hover:shadow-2xl hover:shadow-brand-blue/20">
                         <span

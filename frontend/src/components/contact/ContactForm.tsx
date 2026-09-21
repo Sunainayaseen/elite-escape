@@ -6,7 +6,7 @@ import { type FormEvent, useState } from "react";
 import { apiRequest } from "@/lib/api";
 
 const FIELD_CLASSES =
-  "w-full rounded-xl border border-line/15 bg-bg-navy-light px-4 py-3 text-sm text-text-ink outline-none placeholder:text-text-muted focus:outline-none focus-visible:outline-none focus:border-brand-blue/40";
+  "w-full rounded-xl border border-line/15 bg-bg-navy-light px-4 py-3 text-sm text-text-ink outline-none transition-all duration-300 placeholder:text-text-muted focus:outline-none focus-visible:outline-none focus:-translate-y-0.5 focus:border-brand-blue/60 focus:bg-white focus:shadow-lg focus:shadow-brand-blue/10 focus:ring-4 focus:ring-brand-blue/10";
 
 export function ContactForm({ defaultMessage = "" }: { defaultMessage?: string }) {
   const [status, setStatus] = useState<"idle" | "submitting" | "sent">("idle");
@@ -95,7 +95,7 @@ export function ContactForm({ defaultMessage = "" }: { defaultMessage?: string }
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="neon-glow mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-brand-blue px-6 py-3 text-sm font-semibold text-white transition-colors duration-200 hover:bg-brand-teal disabled:opacity-70"
+        className="neon-glow group mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-brand-blue px-6 py-3 text-sm font-semibold text-white hover:-translate-y-0.5 hover:bg-brand-teal active:translate-y-0 disabled:opacity-70"
       >
         {status === "submitting" ? (
           <>
@@ -105,7 +105,10 @@ export function ContactForm({ defaultMessage = "" }: { defaultMessage?: string }
         ) : (
           <>
             Send Enquiry
-            <Send size={15} />
+            <Send
+              size={15}
+              className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-1"
+            />
           </>
         )}
       </button>

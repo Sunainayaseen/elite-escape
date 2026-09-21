@@ -16,6 +16,10 @@
   --color-text-muted: #5B6B7D;
   --color-gold: #C9982F;
   --color-line: #0F1B2B;
+
+  /* Motion tokens — mirrored in src/lib/motion.ts */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-reveal: 0.7s;
 }
 
 @theme inline {
@@ -36,10 +40,6 @@
 
   --font-sans: var(--font-manrope);
   --font-serif: var(--font-fraunces);
-}
-
-html {
-  scroll-behavior: smooth;
 }
 
 body {
@@ -86,54 +86,249 @@ h1, h2, h3, h4, .font-serif {
   background-color: var(--color-brand-blue);
 }
 
-@keyframes shimmer-text {
-  0% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 200% 50%;
-  }
-}
+/* ------------------------------------------------------------------ *
+ * Motion system
+ * Everything below is progressive enhancement: with JavaScript off, or with
+ * prefers-reduced-motion, all content is simply visible and static.
+ * ------------------------------------------------------------------ */
 
-@keyframes neon-text-pulse {
-  0%, 100% {
-    filter: drop-shadow(0 0 6px rgba(26, 168, 216, 0.55))
-      drop-shadow(0 0 16px rgba(39, 179, 207, 0.35));
-  }
-  50% {
-    filter: drop-shadow(0 0 12px rgba(26, 168, 216, 0.9))
-      drop-shadow(0 0 30px rgba(39, 179, 207, 0.55));
-  }
-}
-
-.animate-shimmer-text {
-  background-size: 200% auto;
-  animation:
-    shimmer-text 3.5s linear infinite,
-    neon-text-pulse 2.4s ease-in-out infinite;
-}
-
-@keyframes neon-glow-pulse {
-  0%, 100% {
-    box-shadow:
-      0 0 8px rgba(26, 168, 216, 0.55),
-      0 0 18px rgba(26, 168, 216, 0.35),
-      0 0 32px rgba(39, 179, 207, 0.25);
-  }
-  50% {
-    box-shadow:
-      0 0 14px rgba(26, 168, 216, 0.9),
-      0 0 32px rgba(26, 168, 216, 0.6),
-      0 0 56px rgba(39, 179, 207, 0.4);
-  }
-}
-
+/* Soft brand glow for primary CTAs. Static at rest, brighter on hover — no looping pulse. */
 .neon-glow {
-  animation: neon-glow-pulse 2.4s ease-in-out infinite;
+  box-shadow:
+    0 0 0 1px rgba(26, 168, 216, 0.18),
+    0 6px 22px rgba(26, 168, 216, 0.3);
+  transition:
+    box-shadow 0.3s var(--ease-out),
+    transform 0.3s var(--ease-out),
+    background-color 0.2s,
+    color 0.2s;
 }
 
-/* Entrance fade-up: content is visible by default (no JS, reduced motion), animated only when the
-   user has not asked for reduced motion. Set --d for a per-element delay. */
+.neon-glow:hover {
+  box-shadow:
+    0 0 0 1px rgba(26, 168, 216, 0.35),
+    0 10px 34px rgba(26, 168, 216, 0.5);
+}
+
+/* Hero headline: each line slides up out of a mask. CSS-only, so it runs without JS. */
+.hero-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+}
+
+/* Masked word reveal (SplitText) */
+.split-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+}
+
+.split-inner {
+  display: inline-block;
+}
+
+/* Pointer parallax layers (PointerScene) */
+.pointer-scene {
+  position: absolute;
+  inset: 0;
+}
+
+.pointer-layer {
+  transform: translate3d(
+    calc(var(--px, 0) * var(--depth, 0) * -1px),
+    calc(var(--py, 0) * var(--depth, 0) * -1px),
+    0
+  );
+  will-change: transform;
+}
+
+/* Tilt cards: only the "active" class (fine pointer + motion allowed) tilts. */
+.tilt-card-active {
+  transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transition: transform 0.3s var(--ease-out);
+}
+
+.tilt-glow {
+  background: radial-gradient(
+    240px circle at var(--glow-x, 50%) var(--glow-y, 50%),
+    rgba(255, 255, 255, 0.14),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tilt-card-active:hover .tilt-glow {
+  opacity: 1;
+}
+
+/* Package / destination card polish, shared so every card behaves the same. */
+.card-lift {
+  transition:
+    transform 0.4s var(--ease-out),
+    box-shadow 0.4s var(--ease-out);
+}
+
+.card-lift:hover,
+.card-lift:focus-visible {
+  transform: translate3d(0, -6px, 0);
+  box-shadow: 0 24px 48px -16px rgba(15, 27, 43, 0.35);
+}
+
+.card-media {
+  transition: transform 0.9s var(--ease-out);
+  transform-origin: 50% 60%;
+}
+
+.card-lift:hover .card-media,
+.card-lift:focus-visible .card-media {
+  transform: scale(1.08) translate3d(-1.5%, -1%, 0);
+}
+
+/* Text-link underline that draws in from the left on hover */
+.link-underline {
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  padding-bottom: 2px;
+  transition:
+    background-size 0.3s var(--ease-out),
+    color 0.2s;
+}
+
+.link-underline:hover,
+.link-underline:focus-visible {
+  background-size: 100% 1px;
+}
+
+/* Itinerary timeline: a dot per day on the rail; TimelineProgress sets data-passed / data-active. */
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  top: 1.6rem;
+  left: -1.75rem;
+  width: 11px;
+  height: 11px;
+  border-radius: 9999px;
+  background: #fff;
+  border: 2px solid rgba(15, 27, 43, 0.2);
+  transition:
+    background-color 0.4s var(--ease-out),
+    border-color 0.4s var(--ease-out),
+    box-shadow 0.4s var(--ease-out);
+}
+
+@media (min-width: 640px) {
+  .timeline-item::before {
+    left: -2.25rem;
+  }
+}
+
+.timeline-item[data-passed]::before {
+  background: var(--color-brand-blue);
+  border-color: var(--color-brand-blue);
+}
+
+.timeline-item[data-active]::before {
+  box-shadow: 0 0 0 5px rgba(40, 144, 189, 0.22);
+}
+
+.timeline-item > details {
+  transition:
+    border-color 0.4s var(--ease-out),
+    box-shadow 0.4s var(--ease-out);
+}
+
+.timeline-item[data-active] > details {
+  border-color: rgba(40, 144, 189, 0.45);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Scroll reveals */
+  .js [data-reveal]:not([data-in]) {
+    opacity: 0;
+    transform: translate3d(var(--rx, 0px), var(--ry, 28px), 0) scale(var(--rs, 1));
+  }
+
+  .js [data-reveal][data-in] {
+    animation: reveal-in var(--dur-reveal) var(--ease-out) var(--rd, 0s) backwards;
+  }
+
+  .js [data-split]:not([data-in]) .split-inner {
+    transform: translate3d(0, 115%, 0);
+  }
+
+  .js [data-split][data-in] .split-inner {
+    animation: split-in 0.85s var(--ease-out) calc(var(--rd, 0s) + var(--i, 0) * 0.06s) backwards;
+  }
+
+  .js [data-reveal-img]:not([data-in]) {
+    clip-path: inset(0 0 100% 0);
+  }
+
+  .js [data-reveal-img]:not([data-in]) .reveal-img-inner {
+    transform: scale(1.15);
+  }
+
+  .js [data-reveal-img][data-in] {
+    animation: clip-in 1s var(--ease-out) var(--rd, 0s) backwards;
+  }
+
+  .js [data-reveal-img][data-in] .reveal-img-inner {
+    animation: img-settle 1.4s var(--ease-out) var(--rd, 0s) backwards;
+  }
+
+  /* Hero entrance */
+  .fade-up {
+    animation: fade-up 0.7s var(--ease-out) both;
+    animation-delay: var(--d, 0s);
+  }
+
+  .hero-line > span {
+    display: block;
+    animation: line-up 1s var(--ease-out) var(--d, 0s) backwards;
+  }
+
+  .kenburns {
+    animation: kenburns 40s ease-in-out infinite alternate;
+  }
+
+  .drift {
+    animation: drift 70s ease-in-out infinite alternate;
+  }
+
+  .spin-slow {
+    animation: spin 160s linear infinite;
+  }
+
+  .float-el {
+    animation: float-y var(--float-d, 9s) ease-in-out var(--float-delay, 0s) infinite alternate;
+  }
+
+  /* WhatsApp button: a soft ring pulses three times after load to draw the eye, then stops. */
+  [data-whatsapp-float]::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    border: 2px solid #25d366;
+    opacity: 0;
+    animation: wa-ring 2.4s var(--ease-out) 2s 3;
+    pointer-events: none;
+  }
+
+  /* Page transition: a very short fade/slide, never a loader. */
+  .page-enter {
+    animation: page-in 0.3s var(--ease-out) backwards;
+  }
+}
+
 @keyframes fade-up {
   from {
     opacity: 0;
@@ -145,9 +340,117 @@ h1, h2, h3, h4, .font-serif {
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .fade-up {
-    animation: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
-    animation-delay: var(--d, 0s);
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    transform: translate3d(var(--rx, 0px), var(--ry, 28px), 0) scale(var(--rs, 1));
+  }
+}
+
+@keyframes split-in {
+  from {
+    transform: translate3d(0, 115%, 0);
+  }
+}
+
+@keyframes line-up {
+  from {
+    transform: translate3d(0, 115%, 0);
+  }
+}
+
+@keyframes clip-in {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes img-settle {
+  from {
+    transform: scale(1.15);
+  }
+}
+
+@keyframes kenburns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.09);
+  }
+}
+
+@keyframes drift {
+  from {
+    transform: translate3d(-4%, 0, 0);
+  }
+  to {
+    transform: translate3d(4%, 0, 0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes float-y {
+  from {
+    transform: translate3d(0, calc(var(--float-y, 10px) * -1), 0);
+  }
+  to {
+    transform: translate3d(0, var(--float-y, 10px), 0);
+  }
+}
+
+@keyframes lightbox-in {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+
+@keyframes wa-ring {
+  from {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.7);
+  }
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+}
+
+/* Belt and braces: anything that still animates is cut to (almost) nothing. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Package pages: the mobile "Enquire Now" bar is fixed to the bottom, so lift the floating WhatsApp
+   button above it and keep the footer's last lines clear of the bar. (Owned by package UX.) */
+@media (max-width: 1023px) {
+  body:has([data-sticky-cta]) [data-whatsapp-float] {
+    bottom: 5.5rem;
+  }
+  body:has([data-sticky-cta]) {
+    padding-bottom: 4.75rem;
   }
 }

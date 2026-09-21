@@ -1,7 +1,9 @@
 import { ExternalLink, Star } from "lucide-react";
 import Image from "next/image";
 
+import { Parallax } from "@/components/motion/Parallax";
 import { Reveal } from "@/components/motion/Reveal";
+import { SectionHeader } from "@/components/motion/SectionHeader";
 import { getGoogleReviews } from "@/lib/google-reviews";
 import { IMG, TESTIMONIALS } from "@/lib/site-data";
 
@@ -47,38 +49,37 @@ export async function Testimonials() {
 
   return (
     <section className="relative isolate overflow-hidden bg-[#080f1c] px-6 py-20 sm:py-28">
-      <Image
-        src={IMG.europe}
-        alt="Scenic terrace overlooking the coast"
-        fill
-        sizes="100vw"
-        className="object-cover"
-      />
+      <Parallax range={40}>
+        <Image
+          src={IMG.europe}
+          alt="Scenic terrace overlooking the coast"
+          fill
+          sizes="100vw"
+          className="object-cover"
+        />
+      </Parallax>
       <div className="absolute inset-0 bg-gradient-to-b from-[#080f1c]/90 via-[#080f1c]/70 to-[#080f1c]/90" />
 
       <div className="relative z-10 mx-auto max-w-7xl">
-        <Reveal className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-widest text-brand-teal-light">
-            Traveler stories
-          </p>
-          <h2 className="mt-3 font-serif text-3xl font-semibold text-white sm:text-4xl">
-            What our travelers say
-          </h2>
-          {place?.rating && (
-            <p className="mt-3 text-sm text-white/70">
-              <span className="font-semibold text-white">
-                {place.rating.toFixed(1)}★
-              </span>{" "}
-              on Google
-              {place.user_ratings_total ? ` · ${place.user_ratings_total} reviews` : ""}
-            </p>
-          )}
-        </Reveal>
+        <SectionHeader
+          tone="dark"
+          eyebrow="Traveler stories"
+          title="What our travelers say"
+          description={
+            place?.rating ? (
+              <p className="text-sm">
+                <span className="font-semibold text-white">{place.rating.toFixed(1)}★</span> on
+                Google
+                {place.user_ratings_total ? ` · ${place.user_ratings_total} reviews` : ""}
+              </p>
+            ) : undefined
+          }
+        />
 
         <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {reviews.map((r, i) => (
-            <Reveal key={r.key} delay={i * 0.08}>
-              <div className="flex h-full flex-col rounded-2xl border border-white/15 bg-white/10 p-6 shadow-lg shadow-black/10 backdrop-blur-md">
+            <Reveal key={r.key} delay={(i % 3) * 0.08} y={32} scale={0.98}>
+              <div className="flex h-full flex-col rounded-2xl border border-white/15 bg-white/10 p-6 shadow-lg shadow-black/10 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-white/30 hover:bg-white/[0.14]">
                 <div className="flex gap-1 text-gold">
                   {Array.from({ length: 5 }).map((_, idx) => (
                     <Star

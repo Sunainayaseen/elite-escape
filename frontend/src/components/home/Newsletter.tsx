@@ -3,7 +3,9 @@
 import Image from "next/image";
 import { type FormEvent, useState } from "react";
 
+import { Parallax } from "@/components/motion/Parallax";
 import { Reveal } from "@/components/motion/Reveal";
+import { SplitText } from "@/components/motion/SplitText";
 import { apiRequest } from "@/lib/api";
 import { IMG } from "@/lib/site-data";
 
@@ -29,13 +31,15 @@ export function Newsletter() {
 
   return (
     <section className="relative isolate overflow-hidden bg-[#080f1c] py-24 sm:py-32">
-      <Image
-        src={IMG.beach}
-        alt="Tropical beach"
-        fill
-        sizes="100vw"
-        className="object-cover"
-      />
+      <Parallax range={40}>
+        <Image
+          src={IMG.beach}
+          alt="Tropical beach"
+          fill
+          sizes="100vw"
+          className="object-cover"
+        />
+      </Parallax>
       <div className="absolute inset-0 bg-gradient-to-b from-[#080f1c]/80 via-[#080f1c]/60 to-[#080f1c]/85" />
 
       <div className="relative z-10 mx-auto flex max-w-2xl flex-col items-center px-6 text-center">
@@ -44,11 +48,11 @@ export function Newsletter() {
             Stay in the loop
           </span>
         </Reveal>
-        <Reveal delay={0.1}>
-          <h2 className="mt-6 font-serif text-3xl font-semibold text-white sm:text-4xl">
-            Get travel inspiration and updates
-          </h2>
-        </Reveal>
+        <SplitText
+          text="Get travel inspiration and updates"
+          delay={0.1}
+          className="mt-6 font-serif text-3xl font-semibold text-white sm:text-4xl"
+        />
         <Reveal delay={0.15}>
           <p className="mt-4 text-white/75">
             New packages and visa updates, straight to your inbox. No spam.

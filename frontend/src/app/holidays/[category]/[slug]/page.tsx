@@ -3,11 +3,23 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { CSSProperties } from "react";
 
+import { GalleryLightbox } from "@/components/holidays/GalleryLightbox";
+import { ItineraryAccordion } from "@/components/holidays/ItineraryAccordion";
+import { MobileEnquireBar } from "@/components/holidays/MobileEnquireBar";
 import { PackageInquiryForm } from "@/components/holidays/PackageInquiryForm";
+import { TimelineProgress } from "@/components/holidays/TimelineProgress";
+import { Parallax } from "@/components/motion/Parallax";
 import { Reveal } from "@/components/motion/Reveal";
-import { getPackage as fetchPackage, getPackages } from "@/lib/data";
+import { getPackage as fetchPackage, getPackages, getSiteSettings } from "@/lib/data";
 import { formatPrice } from "@/lib/format";
+import { packageWhatsAppMessage, whatsappUrl } from "@/lib/whatsapp";
+import { breadcrumbSchema, packageSchema, pageMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+
+// CSS-only entrance for the hero copy (.fade-up in globals.css); visible without JavaScript.
+const delay = (seconds: number) => ({ "--d": `${seconds}s` }) as CSSProperties;
 
 export async function generateStaticParams() {
   const packages = await getPackages();
@@ -27,10 +39,12 @@ export async function generateMetadata({
   const { category, slug } = await params;
   const pkg = await getPackage(category, slug);
   if (!pkg) return {};
-  return {
-    title: `${pkg.title} | Elite Escape Tourism`,
+  return pageMetadata({
+    title: pkg.title,
     description: pkg.summary,
-  };
+    path: `/holidays/${pkg.category}/${pkg.slug}`,
+    image: pkg.image,
+  });
 }
 
 export default async function PackageDetailPage({
@@ -39,25 +53,39 @@ export default async function PackageDetailPage({
   params: Promise<{ category: string; slug: string }>;
 }) {
   const { category, slug } = await params;
-  const pkg = await getPackage(category, slug);
+  const [pkg, settings] = await Promise.all([getPackage(category, slug), getSiteSettings()]);
   if (!pkg) notFound();
+
+  const price = formatPrice(pkg);
+  const whatsapp = whatsappUrl(settings.whatsapp_number, packageWhatsAppMessage(pkg.title));
 
   return (
     <>
+      <JsonLd data={packageSchema(pkg)} />
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Holidays", path: "/holidays" },
+          { name: pkg.category_name, path: `/holidays/${pkg.category}` },
+          { name: pkg.title, path: `/holidays/${pkg.category}/${pkg.slug}` },
+        ])}
+      />
       <section className="relative h-[52vh] min-h-[380px] w-full overflow-hidden">
-        <Image
-          src={pkg.image}
-          alt={pkg.title}
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-        />
+        <Parallax range={48}>
+          <Image
+            src={pkg.image}
+            alt={pkg.title}
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
+        </Parallax>
         <div className="absolute inset-0 bg-gradient-to-t from-[#080f1c] via-[#080f1c]/40 to-[#080f1c]/20" />
         <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[#080f1c]/75 to-transparent" />
 
         <div className="relative flex h-full max-w-7xl flex-col justify-end px-6 pb-10 mx-auto">
-          <nav aria-label="Breadcrumb">
+          <nav aria-label="Breadcrumb" style={delay(0.05)} className="fade-up">
             <ol className="flex flex-wrap items-center gap-2 text-xs text-white/70">
               <li>
                 <Link href="/holidays" className="hover:text-white">
@@ -76,14 +104,17 @@ export default async function PackageDetailPage({
               </li>
             </ol>
           </nav>
-          <div className="mt-3 flex items-center gap-2 text-sm text-white/70">
+          <div style={delay(0.12)} className="fade-up mt-3 flex items-center gap-2 text-sm text-white/70">
             <MapPin size={15} />
             {pkg.country}
           </div>
-          <h1 className="mt-2 max-w-2xl font-serif text-3xl font-semibold text-white sm:text-5xl">
+          <h1
+            style={delay(0.2)}
+            className="fade-up mt-2 max-w-2xl font-serif text-3xl font-semibold text-white sm:text-5xl"
+          >
             {pkg.title}
           </h1>
-          <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-white/80">
+          <div style={delay(0.3)} className="fade-up mt-4 flex flex-wrap items-center gap-4 text-sm text-white/80">
             <span className="flex items-center gap-1.5">
               <Clock3 size={15} />
               {pkg.duration}
@@ -95,6 +126,18 @@ export default async function PackageDetailPage({
               </span>
             )}
           </div>
+          {pkg.tour_types.length > 0 && (
+            <ul style={delay(0.4)} className="fade-up mt-4 flex flex-wrap gap-2" aria-label="Tour types">
+              {pkg.tour_types.map((t) => (
+                <li
+                  key={t}
+                  className="rounded-full border border-white/30 px-3 py-1 text-xs font-medium text-white/90"
+                >
+                  {t}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </section>
 
@@ -102,25 +145,14 @@ export default async function PackageDetailPage({
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_360px]">
           <div>
             {pkg.gallery.length > 1 && (
-            <Reveal className="mb-10">
-              <div className="grid grid-cols-3 gap-3">
-                {pkg.gallery.map((img, i) => (
-                  <div key={i} className="relative h-28 overflow-hidden rounded-xl sm:h-40">
-                    <Image
-                      src={img}
-                      alt={`${pkg.title} photo ${i + 1}`}
-                      fill
-                      sizes="200px"
-                      className="object-cover"
-                    />
-                  </div>
-                ))}
-              </div>
-            </Reveal>
+            <div className="mb-10">
+              <GalleryLightbox images={pkg.gallery} title={pkg.title} />
+            </div>
             )}
 
             <Reveal delay={0.05}>
-              <p className="text-sm leading-relaxed text-text-muted">{pkg.summary}</p>
+              <h2 className="font-serif text-xl font-semibold text-text-ink">Overview</h2>
+              <p className="mt-3 leading-relaxed text-text-muted">{pkg.summary}</p>
             </Reveal>
 
             <Reveal delay={0.1} className="mt-8">
@@ -144,27 +176,10 @@ export default async function PackageDetailPage({
               <h2 className="font-serif text-xl font-semibold text-text-ink">
                 Day-by-day itinerary
               </h2>
-              <div className="mt-5 flex flex-col gap-5">
-                {pkg.itinerary.map((day) => (
-                  <div key={day.day} className="flex gap-4">
-                    <div className="flex flex-col items-center">
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-brand-blue to-brand-navy-accent text-xs font-bold text-white">
-                        {day.day}
-                      </span>
-                      {day.day !== pkg.itinerary.length && (
-                        <span className="mt-1 w-px flex-1 bg-line/15" />
-                      )}
-                    </div>
-                    <div className="pb-5">
-                      <h3 className="font-serif text-base font-semibold text-text-ink">
-                        {day.title}
-                      </h3>
-                      <p className="mt-1 text-sm leading-relaxed text-text-muted">
-                        {day.description}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+              <div className="mt-5">
+                <TimelineProgress>
+                  <ItineraryAccordion days={pkg.itinerary} />
+                </TimelineProgress>
               </div>
             </Reveal>
 
@@ -202,26 +217,41 @@ export default async function PackageDetailPage({
             </Reveal>
           </div>
 
-          <div className="lg:sticky lg:top-24 lg:h-fit">
+          <div id="enquire" className="scroll-mt-24 lg:sticky lg:top-24 lg:h-fit">
             <Reveal delay={0.1}>
               <div className="rounded-2xl border border-line/10 bg-white p-6 shadow-lg shadow-brand-blue/5">
-                <div className="flex items-baseline justify-between">
-                  <div>
-                    <span className="text-xs text-text-muted">Per person</span>
-                    <p className="font-serif text-2xl font-bold text-text-ink">
-                      {formatPrice(pkg)}
-                    </p>
-                  </div>
-                </div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">
+                  {pkg.title}
+                </p>
+                <p className="mt-2 text-xs text-text-muted">Per person</p>
+                <p className="font-serif text-2xl font-bold text-text-ink">{price}</p>
+                <p className="mt-1 flex items-center gap-1.5 text-sm text-text-muted">
+                  <Clock3 size={14} aria-hidden="true" />
+                  {pkg.duration}
+                </p>
 
                 <div className="my-5 h-px bg-line/10" />
 
                 <PackageInquiryForm packageTitle={pkg.title} packageSlug={pkg.slug} />
+
+                {whatsapp && (
+                  <a
+                    href={whatsapp}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 flex w-full items-center justify-center gap-2 rounded-full border border-[#1a9c4b] px-5 py-3 text-sm font-semibold text-[#14803c] transition-colors duration-300 hover:bg-[#25D366]/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#25D366]"
+                  >
+                    Chat on WhatsApp
+                    <span className="sr-only"> about {pkg.title} (opens in a new tab)</span>
+                  </a>
+                )}
               </div>
             </Reveal>
           </div>
         </div>
       </section>
+
+      <MobileEnquireBar price={price} />
     </>
   );
 }

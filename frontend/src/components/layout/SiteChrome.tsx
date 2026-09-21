@@ -3,6 +3,8 @@
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 
+import { PageTransition } from "@/components/motion/PageTransition";
+
 // The public header, footer and floating buttons are hidden on /admin so the dashboard gets its own shell.
 export function SiteChrome({
   header,
@@ -24,7 +26,9 @@ export function SiteChrome({
   return (
     <>
       {header}
-      <main className="flex-1 overflow-x-clip">{children}</main>
+      <main className="flex-1 overflow-x-clip">
+        <PageTransition>{children}</PageTransition>
+      </main>
       {footer}
       {floating}
     </>

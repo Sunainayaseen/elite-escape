@@ -5,23 +5,48 @@ import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/Button";
+import { EASE } from "@/lib/motion";
 import { NAV_LINKS } from "@/lib/site-data";
 import { cn } from "@/lib/utils";
 
 export function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const progressRef = useRef<HTMLSpanElement>(null);
   const pathname = usePathname();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      setScrolled(window.scrollY > 24);
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+      if (progressRef.current) progressRef.current.style.transform = `scaleX(${progress.toFixed(4)})`;
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      cancelAnimationFrame(frame);
+    };
   }, []);
+
+  // Close the mobile menu after navigating, and stop the page scrolling behind it while open.
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
 
   const solid = open || scrolled;
 
@@ -72,12 +97,15 @@ export function Header() {
                 )}
               >
                 {link.label}
-                <span
-                  className={cn(
-                    "absolute -bottom-0.5 left-0 h-px w-full origin-left bg-brand-teal-light transition-transform duration-300 ease-out group-hover:scale-x-100",
-                    active ? "scale-x-100" : "scale-x-0",
-                  )}
-                />
+                {active ? (
+                  <motion.span
+                    layoutId="nav-active"
+                    transition={{ duration: 0.4, ease: EASE }}
+                    className="absolute -bottom-0.5 left-0 h-px w-full bg-brand-teal-light"
+                  />
+                ) : (
+                  <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-brand-teal-light transition-transform duration-300 ease-out group-hover:scale-x-100" />
+                )}
               </Link>
             );
           })}
@@ -86,6 +114,7 @@ export function Header() {
         <div className="hidden lg:block">
           <Button
             href="/contact"
+            arrow
             className="neon-glow bg-brand-teal-light px-5 py-2.5 text-xs text-[#080f1c] hover:bg-white hover:text-[#080f1c]"
           >
             Plan Your Trip
@@ -109,25 +138,31 @@ export function Header() {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25 }}
+            transition={{ duration: 0.3, ease: EASE }}
             className="overflow-hidden border-t border-white/8 bg-[#080f1c] lg:hidden"
           >
             <div className="flex flex-col gap-1 px-6 py-4">
-              {NAV_LINKS.map((link) => {
+              {NAV_LINKS.map((link, i) => {
                 const active =
                   link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
                 return (
-                  <Link
+                  <motion.div
                     key={link.href}
-                    href={link.href}
-                    onClick={() => setOpen(false)}
-                    className={cn(
-                      "rounded-lg px-3 py-3 text-sm font-medium hover:bg-white/5 hover:text-white",
-                      active ? "text-brand-teal-light" : "text-white/65",
-                    )}
+                    initial={{ opacity: 0, x: -12 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, delay: 0.05 + i * 0.04, ease: EASE }}
                   >
-                    {link.label}
-                  </Link>
+                    <Link
+                      href={link.href}
+                      onClick={() => setOpen(false)}
+                      className={cn(
+                        "block rounded-lg px-3 py-3 text-sm font-medium transition-colors hover:bg-white/5 hover:text-white",
+                        active ? "text-brand-teal-light" : "text-white/65",
+                      )}
+                    >
+                      {link.label}
+                    </Link>
+                  </motion.div>
                 );
               })}
               <Button
@@ -140,6 +175,13 @@ export function Header() {
           </motion.nav>
         )}
       </AnimatePresence>
+
+      {/* Reading progress — a scaleX transform, so it never triggers layout */}
+      <span
+        ref={progressRef}
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 bg-gradient-to-r from-brand-blue via-brand-teal-light to-brand-teal"
+      />
     </header>
   );
 }

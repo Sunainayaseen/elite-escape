@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
 
-import { Reveal } from "@/components/motion/Reveal";
+import { SectionHeader } from "@/components/motion/SectionHeader";
 import { IMG } from "@/lib/site-data";
 import { cn } from "@/lib/utils";
 
@@ -37,14 +37,7 @@ export function TravelStyleTabs() {
 
   return (
     <section className="mx-auto max-w-7xl px-6 py-20 sm:py-28">
-      <Reveal className="mx-auto max-w-2xl text-center">
-        <p className="text-xs font-semibold uppercase tracking-widest text-brand-blue">
-          How you&apos;ll travel
-        </p>
-        <h2 className="mt-3 font-serif text-3xl font-semibold text-text-ink sm:text-4xl">
-          Choose your travel style
-        </h2>
-      </Reveal>
+      <SectionHeader eyebrow="How you'll travel" title="Choose your travel style" />
 
       <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
         {STYLES.map((s) => (

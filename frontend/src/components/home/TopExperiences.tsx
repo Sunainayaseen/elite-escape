@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-import { Reveal } from "@/components/motion/Reveal";
+import { SectionHeader } from "@/components/motion/SectionHeader";
 import { formatPrice } from "@/lib/format";
 import type { Category, Package } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -26,17 +26,11 @@ export function TopExperiences({
 
   return (
     <section className="mx-auto max-w-7xl px-6 py-20 sm:py-28">
-      <Reveal className="mx-auto max-w-2xl text-center">
-        <p className="text-xs font-semibold uppercase tracking-widest text-brand-blue">
-          Our packages
-        </p>
-        <h2 className="mt-3 font-serif text-3xl font-semibold text-text-ink sm:text-4xl">
-          Popular holiday packages
-        </h2>
-        <p className="mt-4 text-text-muted">
-          Browse our holiday packages by region.
-        </p>
-      </Reveal>
+      <SectionHeader
+        eyebrow="Our packages"
+        title="Popular holiday packages"
+        description="Browse our holiday packages by region."
+      />
 
       <div className="mt-10 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
         {withPackages.map((cat) => (
@@ -69,7 +63,7 @@ export function TopExperiences({
             <Link
               key={pkg.slug}
               href={`/holidays/${pkg.category}/${pkg.slug}`}
-              className="group overflow-hidden rounded-2xl border border-line/10 bg-white shadow-sm shadow-brand-blue/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-blue/15"
+              className="card-lift group overflow-hidden rounded-2xl border border-line/10 bg-white shadow-sm shadow-brand-blue/5"
             >
               <div className="relative h-52 overflow-hidden">
                 <Image
@@ -77,7 +71,7 @@ export function TopExperiences({
                   alt={pkg.title}
                   fill
                   sizes="(min-width: 640px) 50vw, 100vw"
-                  className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                  className="card-media object-cover"
                 />
                 <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-text-ink backdrop-blur-sm">
                   {pkg.duration}

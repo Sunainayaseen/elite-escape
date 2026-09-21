@@ -63,11 +63,11 @@ export function Footer({ settings, hasBlog = false }: { settings: SiteSettings; 
     <footer className="relative overflow-hidden bg-[#080f1c] text-white/80">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-teal-light/60 to-transparent" />
       <div
-        className="pointer-events-none absolute -left-32 top-0 h-72 w-72 rounded-full opacity-20 blur-3xl"
+        className="float-el pointer-events-none absolute -left-32 top-0 h-72 w-72 rounded-full opacity-20 blur-3xl"
         style={{ background: "#27B3CF" }}
       />
       <div
-        className="pointer-events-none absolute -right-32 bottom-0 h-96 w-96 rounded-full opacity-15 blur-3xl"
+        className="float-el pointer-events-none absolute -right-32 bottom-0 h-96 w-96 rounded-full opacity-15 blur-3xl"
         style={{ background: "#2A4596" }}
       />
 
@@ -232,21 +232,21 @@ export function Footer({ settings, hasBlog = false }: { settings: SiteSettings; 
             <div className="flex items-center gap-4">
               <Link
                 href="/privacy-policy"
-                className="transition-colors hover:text-brand-teal-light"
+                className="link-underline transition-colors hover:text-brand-teal-light"
               >
                 Privacy Policy
               </Link>
               <span className="h-3 w-px bg-white/15" />
               <Link
                 href="/terms-conditions"
-                className="transition-colors hover:text-brand-teal-light"
+                className="link-underline transition-colors hover:text-brand-teal-light"
               >
                 Terms &amp; Conditions
               </Link>
               <span className="h-3 w-px bg-white/15" />
               <Link
                 href="/cookie-policy"
-                className="transition-colors hover:text-brand-teal-light"
+                className="link-underline transition-colors hover:text-brand-teal-light"
               >
                 Cookie Policy
               </Link>

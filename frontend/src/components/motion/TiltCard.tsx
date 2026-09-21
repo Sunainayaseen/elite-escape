@@ -1,10 +1,15 @@
 "use client";
 
-import { motion, useMotionTemplate, useSpring } from "framer-motion";
-import type { MouseEvent, ReactNode } from "react";
+import { type PointerEvent, type ReactNode, useRef } from "react";
 
+import { TILT_MAX_DEG } from "@/lib/motion";
+import { useFinePointer, usePrefersReducedMotion } from "@/lib/use-motion-env";
 import { cn } from "@/lib/utils";
 
+/**
+ * Very subtle cursor tilt with a soft light. Mouse only: touch devices and reduced-motion
+ * visitors get a plain wrapper. The card's own link/content stays fully clickable.
+ */
 export function TiltCard({
   children,
   className,
@@ -12,42 +17,46 @@ export function TiltCard({
   children: ReactNode;
   className?: string;
 }) {
-  const rotateX = useSpring(0, { stiffness: 300, damping: 25 });
-  const rotateY = useSpring(0, { stiffness: 300, damping: 25 });
-  const scale = useSpring(1, { stiffness: 300, damping: 25 });
-  const glowX = useSpring(50, { stiffness: 300, damping: 30 });
-  const glowY = useSpring(50, { stiffness: 300, damping: 30 });
-  const glow = useMotionTemplate`radial-gradient(220px circle at ${glowX}% ${glowY}%, rgba(40,144,189,0.14), transparent 70%)`;
+  const ref = useRef<HTMLDivElement>(null);
+  const frame = useRef(0);
+  const fine = useFinePointer();
+  const reduced = usePrefersReducedMotion();
+  const active = fine && !reduced;
 
-  function handleMove(e: MouseEvent<HTMLDivElement>) {
+  function apply(rx: number, ry: number, gx: number, gy: number) {
+    const el = ref.current;
+    if (!el) return;
+    el.style.setProperty("--tilt-x", `${rx.toFixed(2)}deg`);
+    el.style.setProperty("--tilt-y", `${ry.toFixed(2)}deg`);
+    el.style.setProperty("--glow-x", `${gx.toFixed(1)}%`);
+    el.style.setProperty("--glow-y", `${gy.toFixed(1)}%`);
+  }
+
+  function onMove(e: PointerEvent<HTMLDivElement>) {
+    if (!active || e.pointerType !== "mouse") return;
     const rect = e.currentTarget.getBoundingClientRect();
     const px = (e.clientX - rect.left) / rect.width;
     const py = (e.clientY - rect.top) / rect.height;
-    rotateY.set((px - 0.5) * 14);
-    rotateX.set((0.5 - py) * 14);
-    glowX.set(px * 100);
-    glowY.set(py * 100);
+    cancelAnimationFrame(frame.current);
+    frame.current = requestAnimationFrame(() =>
+      apply((0.5 - py) * TILT_MAX_DEG * 2, (px - 0.5) * TILT_MAX_DEG * 2, px * 100, py * 100),
+    );
   }
 
-  function handleLeave() {
-    rotateX.set(0);
-    rotateY.set(0);
-    scale.set(1);
+  function onLeave() {
+    cancelAnimationFrame(frame.current);
+    apply(0, 0, 50, 50);
   }
 
   return (
-    <motion.div
-      onMouseMove={handleMove}
-      onMouseEnter={() => scale.set(1.02)}
-      onMouseLeave={handleLeave}
-      style={{ rotateX, rotateY, scale, transformPerspective: 900 }}
-      className={cn("relative", className)}
+    <div
+      ref={ref}
+      onPointerMove={onMove}
+      onPointerLeave={onLeave}
+      className={cn("tilt-card relative", active && "tilt-card-active", className)}
     >
       {children}
-      <motion.div
-        className="pointer-events-none absolute inset-0 rounded-[inherit]"
-        style={{ background: glow }}
-      />
-    </motion.div>
+      {active && <span aria-hidden className="tilt-glow pointer-events-none absolute inset-0 rounded-[inherit]" />}
+    </div>
   );
 }

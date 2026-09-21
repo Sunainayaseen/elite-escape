@@ -5,6 +5,7 @@ import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 
 import { Reveal } from "@/components/motion/Reveal";
+import { SectionHeader } from "@/components/motion/SectionHeader";
 import { FAQS } from "@/lib/site-data";
 import { cn } from "@/lib/utils";
 
@@ -31,14 +32,7 @@ export function FAQ({
       />
 
       <div className="relative mx-auto max-w-3xl px-6">
-        <Reveal className="text-center">
-          <p className="text-xs font-semibold uppercase tracking-widest text-brand-blue">
-            {eyebrow}
-          </p>
-          <h2 className="mt-3 font-serif text-3xl font-semibold text-text-ink sm:text-4xl">
-            {title}
-          </h2>
-        </Reveal>
+        <SectionHeader eyebrow={eyebrow} title={title} />
 
         <div className="mt-12 flex flex-col gap-4">
           {items.map((faq, i) => {

@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Reveal } from "@/components/motion/Reveal";
+import { SplitText } from "@/components/motion/SplitText";
 import { Button } from "@/components/ui/Button";
 import { formatPrice } from "@/lib/format";
 import type { Package } from "@/lib/types";
@@ -19,10 +20,12 @@ export function LuxuryPackages({ packages }: { packages: readonly Package[] }) {
           <p className="text-xs font-semibold uppercase tracking-widest text-brand-blue">
             Featured
           </p>
-          <h2 className="mt-3 font-serif text-3xl font-semibold text-text-ink sm:text-4xl">
-            Featured packages
-          </h2>
         </Reveal>
+        <SplitText
+          text="Featured packages"
+          delay={0.05}
+          className="order-3 mt-3 basis-full font-serif text-3xl font-semibold text-text-ink sm:text-4xl"
+        />
         <Reveal delay={0.1}>
           <Button href="/holidays" variant="outline" className="px-5 py-2.5 text-sm">
             View all
@@ -36,7 +39,9 @@ export function LuxuryPackages({ packages }: { packages: readonly Package[] }) {
           return (
             <Reveal
               key={pkg.slug}
-              delay={i * 0.1}
+              delay={i * 0.08}
+              y={36}
+              scale={0.97}
               className={cn(
                 item.big
                   ? "col-span-2 sm:col-span-2 sm:row-span-2"
@@ -46,7 +51,7 @@ export function LuxuryPackages({ packages }: { packages: readonly Package[] }) {
               <Link
                 href={`/holidays/${pkg.category}/${pkg.slug}`}
                 className={cn(
-                  "group relative block h-full overflow-hidden rounded-2xl shadow-lg shadow-brand-blue/10",
+                  "card-lift group relative block h-full overflow-hidden rounded-2xl shadow-lg shadow-brand-blue/10",
                   item.big ? "h-64 sm:h-full" : "h-56 sm:h-full",
                 )}
               >
@@ -55,12 +60,12 @@ export function LuxuryPackages({ packages }: { packages: readonly Package[] }) {
                   alt={pkg.title}
                   fill
                   sizes={item.big ? "50vw" : "25vw"}
-                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                  className="card-media object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/5" />
 
-                <span className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-xl border border-white/25 bg-white/10 text-white backdrop-blur-md">
-                  <ArrowUpRight size={16} />
+                <span className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-xl border border-white/25 bg-white/10 text-white backdrop-blur-md transition-colors duration-300 group-hover:bg-brand-blue">
+                  <ArrowUpRight size={16} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </span>
 
                 <div className="absolute inset-x-0 bottom-0 p-5">

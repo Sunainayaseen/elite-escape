@@ -1,6 +1,9 @@
 import Image from "next/image";
 
+import { ImageReveal } from "@/components/motion/ImageReveal";
+import { Parallax } from "@/components/motion/Parallax";
 import { Reveal } from "@/components/motion/Reveal";
+import { SplitText } from "@/components/motion/SplitText";
 import { TRUST_STATS } from "@/lib/site-data";
 
 export function WhyEliteEscape() {
@@ -11,9 +14,10 @@ export function WhyEliteEscape() {
           <p className="text-xs font-semibold uppercase tracking-widest text-brand-blue">
             About us
           </p>
-          <h2 className="mt-3 font-serif text-3xl font-semibold text-text-ink sm:text-4xl">
-            Why Elite Escape
-          </h2>
+          <SplitText
+            text="Why Elite Escape"
+            className="mt-3 font-serif text-3xl font-semibold text-text-ink sm:text-4xl"
+          />
           <p className="mt-5 leading-relaxed text-text-muted">
             We turn &ldquo;I wish we could go there&rdquo; into a plan. Every
             package is a starting point that our travel team will adjust to
@@ -33,22 +37,24 @@ export function WhyEliteEscape() {
           </div>
         </Reveal>
 
-        <Reveal delay={0.1} x={40} y={0}>
-          <div className="relative h-[420px] overflow-hidden rounded-3xl shadow-xl shadow-brand-blue/10 sm:h-[520px]">
-            <Image
-              src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1400&q=80"
-              alt="Snow-capped mountain range"
-              fill
-              sizes="(min-width: 1024px) 50vw, 100vw"
-              className="object-cover"
-            />
+        <ImageReveal delay={0.1} className="rounded-3xl shadow-xl shadow-brand-blue/10">
+          <div className="relative h-[420px] overflow-hidden rounded-3xl sm:h-[520px]">
+            <Parallax range={36}>
+              <Image
+                src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1400&q=80"
+                alt="Snow-capped mountain range"
+                fill
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                className="object-cover"
+              />
+            </Parallax>
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
             <div className="absolute bottom-5 left-5 inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-xs font-medium text-text-ink backdrop-blur-sm">
               <span className="h-2 w-2 rounded-full bg-brand-teal-light" />
               Providing exclusive, end-to-end travel experiences
             </div>
           </div>
-        </Reveal>
+        </ImageReveal>
       </div>
     </section>
   );

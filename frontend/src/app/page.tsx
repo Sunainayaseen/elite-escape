@@ -1,5 +1,8 @@
+import type { Metadata } from "next";
+
 import { Categories } from "@/components/home/Categories";
 import { CTASection } from "@/components/home/CTASection";
+import { ExploreWorld } from "@/components/home/ExploreWorld";
 import { FAQ } from "@/components/home/FAQ";
 import { Hero } from "@/components/home/Hero";
 import { HowItWorks } from "@/components/home/HowItWorks";
@@ -11,11 +14,19 @@ import { TopExperiences } from "@/components/home/TopExperiences";
 import { TravelStyleTabs } from "@/components/home/TravelStyleTabs";
 import { TripPlanner } from "@/components/home/TripPlanner";
 import { WhyEliteEscape } from "@/components/home/WhyEliteEscape";
-import { FlightRoutes } from "@/components/motion/FlightRoutes";
-import { getCategories, getPackages } from "@/lib/data";
+import { getCategories, getPackages, getSiteSettings } from "@/lib/data";
+import { officesToPoints, packagesToPoints } from "@/lib/geo";
+
+// Title, description and Open Graph tags come from the root layout; only the canonical is page-specific.
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 export default async function Home() {
-  const [categories, packages] = await Promise.all([getCategories(), getPackages()]);
+  const [categories, packages, settings] = await Promise.all([
+    getCategories(),
+    getPackages(),
+    getSiteSettings(),
+  ]);
+  const globePoints = [...packagesToPoints(packages), ...officesToPoints(settings.offices)];
 
   return (
     <>
@@ -23,7 +34,7 @@ export default async function Home() {
       <TripPlanner packages={packages} />
       <ServiceHighlights />
       <Categories categories={categories} />
-      <FlightRoutes />
+      <ExploreWorld points={globePoints} />
       <TopExperiences categories={categories} packages={packages} />
       <LuxuryPackages packages={packages} />
       <HowItWorks />
