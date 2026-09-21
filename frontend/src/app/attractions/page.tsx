@@ -6,12 +6,14 @@ import { Reveal } from "@/components/motion/Reveal";
 import { TiltCard } from "@/components/motion/TiltCard";
 import { CTASection } from "@/components/home/CTASection";
 import { ATTRACTIONS } from "@/lib/site-data";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "UAE Attractions & Activities | Elite Escape Tourism",
+export const metadata: Metadata = pageMetadata({
+  title: "UAE Attractions & Activities",
   description:
     "A guide to the UAE's must-see attractions and activities, from Burj Khalifa and the Museum of the Future to Sheikh Zayed Grand Mosque and desert safaris.",
-};
+  path: "/attractions",
+});
 
 export default function AttractionsPage() {
   return (

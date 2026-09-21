@@ -3,11 +3,14 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/layout/PageHero";
 import { Reveal } from "@/components/motion/Reveal";
 import { CONTACT_EMAIL } from "@/lib/site-data";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Terms & Conditions | Elite Escape Tourism",
-  description: "Booking terms, pricing, cancellations, and visa disclaimers for Elite Escape Tourism.",
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Terms & Conditions",
+  description:
+    "Booking terms, pricing, cancellations, and visa disclaimers for Elite Escape Tourism.",
+  path: "/terms-conditions",
+});
 
 const SECTIONS = [
   {

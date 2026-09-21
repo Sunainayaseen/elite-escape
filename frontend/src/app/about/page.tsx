@@ -7,12 +7,14 @@ import { PageHero } from "@/components/layout/PageHero";
 import { Reveal } from "@/components/motion/Reveal";
 import { TiltCard } from "@/components/motion/TiltCard";
 import { IMG, OFFICES, TRUST_STATS } from "@/lib/site-data";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "About Us | Elite Escape Tourism",
+export const metadata: Metadata = pageMetadata({
+  title: "About Us",
   description:
-    "Elite Escape Tourism offers holiday packages, visa assistance, attractions and seasonal tours from offices in Dubai and Lahore.",
-};
+    "Meet Elite Escape Tourism, a travel agency with offices in Dubai and Lahore offering holiday packages, visa assistance, attractions and seasonal tours.",
+  path: "/about",
+});
 
 const PILLARS = [
   {

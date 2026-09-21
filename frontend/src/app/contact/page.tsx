@@ -5,12 +5,14 @@ import { ContactForm } from "@/components/contact/ContactForm";
 import { PageHero } from "@/components/layout/PageHero";
 import { Reveal } from "@/components/motion/Reveal";
 import { getSiteSettings } from "@/lib/data";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Contact Us | Elite Escape Tourism",
+export const metadata: Metadata = pageMetadata({
+  title: "Contact Us",
   description:
     "Get in touch with Elite Escape Tourism — Dubai and Lahore offices, phone, WhatsApp, and email support for your next trip.",
-};
+  path: "/contact",
+});
 
 export default async function ContactPage({
   searchParams,
@@ -43,7 +45,7 @@ export default async function ContactPage({
             {OFFICES.map((office) => (
               <div
                 key={office.city}
-                className="rounded-2xl border border-line/10 bg-white p-6 shadow-sm shadow-brand-blue/5"
+                className="rounded-2xl border border-line/10 bg-white p-6 shadow-sm shadow-brand-blue/5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-brand-blue/10"
               >
                 <div className="flex items-start gap-2.5">
                   <MapPin size={16} className="mt-0.5 shrink-0 text-brand-blue" />

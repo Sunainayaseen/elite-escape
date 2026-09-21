@@ -5,11 +5,14 @@ import Link from "next/link";
 import { PageHero } from "@/components/layout/PageHero";
 import { Reveal } from "@/components/motion/Reveal";
 import { getBlogPosts } from "@/lib/data";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Travel Blog | Elite Escape Tourism",
-  description: "Travel guides, visa advice and destination inspiration from Elite Escape Tourism.",
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Travel Blog",
+  description:
+    "Travel guides, visa advice and destination inspiration from Elite Escape Tourism.",
+  path: "/blog",
+});
 
 function formatDate(value: string | null) {
   return value

@@ -3,12 +3,14 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/layout/PageHero";
 import { Reveal } from "@/components/motion/Reveal";
 import { CONTACT_EMAIL } from "@/lib/site-data";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Cookie Policy | Elite Escape Tourism",
-  description: "How the Elite Escape Tourism website uses cookies and similar technologies.",
-  alternates: { canonical: "/cookie-policy" },
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Cookie Policy",
+  description:
+    "How the Elite Escape Tourism website uses cookies and similar technologies.",
+  path: "/cookie-policy",
+});
 
 // Describes only what the site actually does today: no analytics, advertising or tracking cookies on
 // the public pages. If analytics or a chat widget is added later, update this page first.

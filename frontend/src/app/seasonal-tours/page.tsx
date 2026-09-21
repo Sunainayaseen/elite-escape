@@ -8,12 +8,14 @@ import { PageHero } from "@/components/layout/PageHero";
 import { Reveal } from "@/components/motion/Reveal";
 import { TiltCard } from "@/components/motion/TiltCard";
 import { SEASONAL_TOURS } from "@/lib/site-data";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Seasonal Tours | Elite Escape Tourism",
+export const metadata: Metadata = pageMetadata({
+  title: "Seasonal Tours",
   description:
     "Seasonal holidays timed for the best time to go, from Eid in the Maldives and winter in the Swiss Alps to summer in Bali and cherry blossom season in Japan. Enquire and we'll tailor it to you.",
-};
+  path: "/seasonal-tours",
+});
 
 export default function SeasonalToursPage() {
   return (

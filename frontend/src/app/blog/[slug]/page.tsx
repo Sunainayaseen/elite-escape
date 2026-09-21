@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 
 import { CTASection } from "@/components/home/CTASection";
 import { getBlogPost, getBlogPosts } from "@/lib/data";
+import { pageMetadata } from "@/lib/seo";
 
 export async function generateStaticParams() {
   const posts = await getBlogPosts();
@@ -19,10 +20,12 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = await getBlogPost(slug);
   if (!post) return {};
-  return {
-    title: `${post.seo_title || post.title} | Elite Escape Tourism`,
-    description: post.meta_description || post.excerpt || undefined,
-  };
+  return pageMetadata({
+    title: post.seo_title || post.title,
+    description: post.meta_description || post.excerpt || post.title,
+    path: `/blog/${post.slug}`,
+    image: post.cover_image ?? undefined,
+  });
 }
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {

@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 
 import { HolidaysBrowser } from "@/components/holidays/HolidaysBrowser";
 import { getCategories, getPackages } from "@/lib/data";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Holiday Packages | Elite Escape Tourism",
+export const metadata: Metadata = pageMetadata({
+  title: "Holiday Packages",
   description:
-    "Browse curated holiday packages across budget visa-free trips, trending Europe, beach & islands, long-haul signature journeys, classic favorites, and desert adventures.",
-};
+    "Browse Elite Escape Tourism holiday packages with day-by-day itineraries, inclusions and per-person prices in AED. Enquire online or on WhatsApp to tailor a trip to your dates.",
+  path: "/holidays",
+});
 
 export default async function HolidaysPage({
   searchParams,

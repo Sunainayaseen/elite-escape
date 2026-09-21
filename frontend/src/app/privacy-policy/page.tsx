@@ -3,11 +3,14 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/layout/PageHero";
 import { Reveal } from "@/components/motion/Reveal";
 import { CONTACT_EMAIL } from "@/lib/site-data";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Privacy Policy | Elite Escape Tourism",
-  description: "How Elite Escape Tourism collects, uses, and protects your information.",
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Privacy Policy",
+  description:
+    "How Elite Escape Tourism collects, uses, and protects your information.",
+  path: "/privacy-policy",
+});
 
 const SECTIONS = [
   {

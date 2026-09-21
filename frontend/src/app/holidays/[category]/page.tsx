@@ -5,6 +5,8 @@ import { notFound } from "next/navigation";
 import { PackageGrid } from "@/components/holidays/PackageGrid";
 import { getCategories, getPackages } from "@/lib/data";
 import { cn } from "@/lib/utils";
+import { breadcrumbSchema, pageMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
 
 export async function generateStaticParams() {
   const categories = await getCategories();
@@ -24,10 +26,12 @@ export async function generateMetadata({
   const { category: categorySlug } = await params;
   const category = await getCategory(categorySlug);
   if (!category) return {};
-  return {
-    title: `${category.name} Holiday Packages | Elite Escape Tourism`,
-    description: category.description ?? undefined,
-  };
+  return pageMetadata({
+    title: `${category.name} Holiday Packages`,
+    description: `${category.description ?? `Holiday packages in ${category.name}.`} Browse day-by-day itineraries, inclusions and per-person prices in AED.`,
+    path: `/holidays/${category.slug}`,
+    image: category.image ?? undefined,
+  });
 }
 
 export default async function CategoryPage({
@@ -44,6 +48,13 @@ export default async function CategoryPage({
 
   return (
     <>
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Holidays", path: "/holidays" },
+          { name: category.name, path: `/holidays/${category.slug}` },
+        ])}
+      />
       <section className="relative overflow-hidden bg-[#080f1c] pb-16 pt-32 sm:pt-40">
         <div
           className="pointer-events-none absolute -left-32 top-0 h-72 w-72 rounded-full opacity-20 blur-3xl"
