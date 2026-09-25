@@ -3,6 +3,8 @@ from collections import defaultdict, deque
 
 from fastapi import HTTPException, Request, status
 
+from app.core.http import client_ip
+
 
 class RateLimiter:
     """In-memory sliding-window limiter, per client IP. Fine for a single-process deployment;
@@ -14,12 +16,9 @@ class RateLimiter:
         self._hits: dict[str, deque[float]] = defaultdict(deque)
 
     def __call__(self, request: Request) -> None:
-        # The last hop is the one our own reverse proxy (Caddy) appended; earlier entries are client-supplied
-        # and could be spoofed to dodge the limit.
-        forwarded = request.headers.get("x-forwarded-for")
-        client = forwarded.split(",")[-1].strip() if forwarded else (
-            request.client.host if request.client else "unknown"
-        )
+        # client_ip() only trusts X-Forwarded-For when the API sits behind our own proxy. Trusting it
+        # unconditionally would let anyone who can reach the API directly rotate the header and dodge the limit.
+        client = client_ip(request)
         now = time.monotonic()
         hits = self._hits[client]
         while hits and now - hits[0] > self.window_seconds:

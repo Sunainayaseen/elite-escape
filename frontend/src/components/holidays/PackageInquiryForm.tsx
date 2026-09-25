@@ -3,8 +3,10 @@
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { type FormEvent, useState } from "react";
 
+import { useWhatsAppNumber } from "@/components/layout/WhatsAppLink";
 import { Button } from "@/components/ui/Button";
 import { apiRequest } from "@/lib/api";
+import { whatsappUrl } from "@/lib/whatsapp";
 
 const FIELD =
   "rounded-xl border border-line/15 bg-white px-4 py-3 text-sm text-text-ink placeholder:text-text-muted focus:border-brand-blue focus:outline-none";
@@ -24,12 +26,37 @@ export function PackageInquiryForm({
 }) {
   const [status, setStatus] = useState<"idle" | "submitting" | "sent">("idle");
   const [error, setError] = useState<string | null>(null);
+  const [chatUrl, setChatUrl] = useState<string | null>(null);
+  const whatsappNumber = useWhatsAppNumber();
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
     setStatus("submitting");
     setError(null);
+
+    // With a WhatsApp number configured, the enquiry lands straight in a WhatsApp chat carrying
+    // the traveller's details. The enquiry is still saved to the dashboard first. The tab is
+    // opened right now, inside the click, so browsers do not treat it as a blocked popup.
+    const notes = ((data.get("notes") as string) || "").trim();
+    const url = data.get("website")
+      ? null
+      : whatsappUrl(
+          whatsappNumber,
+          [
+            `Hello Elite Escape Tourism, I'd like to enquire about the ${packageTitle} package.`,
+            `Name: ${data.get("name")}`,
+            `Phone: ${data.get("phone")}`,
+            `Preferred travel date: ${data.get("travel_date")}`,
+            `Travelers: ${Number(data.get("travelers")) || 1}`,
+            notes && `Notes: ${notes}`,
+          ]
+            .filter(Boolean)
+            .join("\n"),
+        );
+    const chatTab = url ? window.open("", "_blank") : null;
+    if (chatTab) chatTab.opener = null;
+
     try {
       await apiRequest("/api/inquiries", {
         body: {
@@ -45,8 +72,18 @@ export function PackageInquiryForm({
           website: data.get("website"),
         },
       });
+      setChatUrl(url);
+      if (url && chatTab) chatTab.location.href = url;
       setStatus("sent");
     } catch (err) {
+      // The chat is the goal: if saving failed, still hand the traveller to WhatsApp.
+      if (url) {
+        setChatUrl(url);
+        if (chatTab) chatTab.location.href = url;
+        setStatus("sent");
+        return;
+      }
+      chatTab?.close();
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
       setStatus("idle");
     }
@@ -60,9 +97,20 @@ export function PackageInquiryForm({
           Thanks — we&apos;ve got it!
         </p>
         <p className="text-sm text-text-muted">
-          One of our travel experts will reach out to you about {packageTitle}{" "}
-          soon.
+          {chatUrl
+            ? `We've opened WhatsApp so you can chat with our team about ${packageTitle}.`
+            : `One of our travel experts will reach out to you about ${packageTitle} soon.`}
         </p>
+        {chatUrl && (
+          <a
+            href={chatUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-semibold text-brand-blue hover:underline"
+          >
+            WhatsApp didn&apos;t open? Tap here
+          </a>
+        )}
       </div>
     );
   }
@@ -119,7 +167,7 @@ export function PackageInquiryForm({
             Sending...
           </>
         ) : (
-          `Enquire about ${packageTitle}`
+          whatsappUrl(whatsappNumber, "x") ? "Enquire on WhatsApp" : `Enquire about ${packageTitle}`
         )}
       </Button>
       <p className="text-center text-[11px] text-text-muted">

@@ -113,10 +113,10 @@ export function Footer({ settings, hasBlog = false }: { settings: SiteSettings; 
         </Reveal>
 
         <Reveal delay={0.08} className="lg:col-span-2">
-          <h3 className="mb-5 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45">
+          <h2 className="mb-5 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45">
             Quick Links
             <span className="mt-2 block h-0.5 w-8 rounded-full bg-gradient-to-r from-brand-teal-light to-transparent" />
-          </h3>
+          </h2>
           <ul className="flex flex-col gap-3.5">
             {[...FOOTER_QUICK_LINKS, ...(hasBlog ? [{ label: "Blog", href: "/blog" }] : [])].map((link) => (
               <li key={link.href}>
@@ -138,10 +138,10 @@ export function Footer({ settings, hasBlog = false }: { settings: SiteSettings; 
         </Reveal>
 
         <Reveal delay={0.16} className="lg:col-span-3">
-          <h3 className="mb-5 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45">
+          <h2 className="mb-5 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45">
             Tour Type
             <span className="mt-2 block h-0.5 w-8 rounded-full bg-gradient-to-r from-brand-teal-light to-transparent" />
-          </h3>
+          </h2>
           <ul className="flex flex-col gap-3.5">
             {FOOTER_TOUR_TYPES.map(({ label, href, icon: Icon }) => (
               <li key={href}>
@@ -162,10 +162,10 @@ export function Footer({ settings, hasBlog = false }: { settings: SiteSettings; 
         </Reveal>
 
         <Reveal delay={0.24} className="lg:col-span-3">
-          <h3 className="mb-5 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45">
+          <h2 className="mb-5 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45">
             Contact Us
             <span className="mt-2 block h-0.5 w-8 rounded-full bg-gradient-to-r from-brand-teal-light to-transparent" />
-          </h3>
+          </h2>
           <div className="flex flex-col gap-4">
             {OFFICES.map((office) => (
               <div

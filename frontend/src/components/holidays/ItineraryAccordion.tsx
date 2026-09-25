@@ -15,7 +15,7 @@ export function ItineraryAccordion({ days }: { days: readonly Day[] }) {
           >
             <summary className="flex cursor-pointer list-none items-center gap-4 rounded-xl px-4 py-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-teal-light [&::-webkit-details-marker]:hidden">
               <span className="flex h-11 w-14 shrink-0 flex-col items-center justify-center rounded-lg bg-bg-navy-light text-brand-navy-accent">
-                <span className="text-[9px] font-semibold uppercase tracking-widest">Day</span>
+                <span className="text-[11px] font-semibold uppercase tracking-widest">Day</span>
                 <span className="font-serif text-lg font-semibold leading-none">
                   {String(d.day).padStart(2, "0")}
                 </span>

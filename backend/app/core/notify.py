@@ -13,7 +13,9 @@ def send_staff_email(subject: str, body: str) -> None:
     if not settings.smtp_host or not settings.notify_email:
         return
     msg = EmailMessage()
-    msg["Subject"] = subject
+    # Visitor-supplied text (e.g. a name) can contain line breaks; a header must be one line, and the
+    # email library refuses anything else, which would silently drop the notification.
+    msg["Subject"] = " ".join(subject.split())[:200]
     msg["From"] = settings.smtp_from or settings.smtp_user or settings.notify_email
     msg["To"] = settings.notify_email
     msg.set_content(body)

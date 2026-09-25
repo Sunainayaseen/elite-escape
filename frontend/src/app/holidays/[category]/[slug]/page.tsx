@@ -251,7 +251,7 @@ export default async function PackageDetailPage({
         </div>
       </section>
 
-      <MobileEnquireBar price={price} />
+      <MobileEnquireBar price={price} title={pkg.title} />
     </>
   );
 }

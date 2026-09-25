@@ -43,9 +43,9 @@ export default function AttractionsPage() {
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/5 transition-opacity duration-300 group-hover:from-black/90" />
                   <div className="relative flex h-full flex-col justify-end p-6">
-                    <h3 className="font-serif text-xl font-semibold text-white">
+                    <h2 className="font-serif text-xl font-semibold text-white">
                       {attraction.name}
-                    </h3>
+                    </h2>
                     <p className="mt-2 text-sm leading-relaxed text-white/80">
                       {attraction.description}
                     </p>

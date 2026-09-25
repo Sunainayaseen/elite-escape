@@ -1,15 +1,10 @@
 import {
   Compass,
   Landmark,
-  Martini,
   Mountain,
   Palmtree,
-  Plane,
   PlaneTakeoff,
   SlidersHorizontal,
-  Star,
-  Ticket,
-  Wallet,
 } from "lucide-react";
 
 export const NAV_LINKS = [

@@ -12,10 +12,15 @@ const VARIANTS = {
   ghost: "text-text-ink hover:text-brand-teal-light",
 } as const;
 
-type Variant = keyof typeof VARIANTS;
+export type ButtonVariant = keyof typeof VARIANTS;
+type Variant = ButtonVariant;
 
 const baseClasses =
   "group inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-all duration-200 whitespace-nowrap hover:-translate-y-0.5 active:translate-y-0 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-teal-light";
+
+export function buttonClasses(variant: ButtonVariant = "primary", className?: string) {
+  return cn(baseClasses, VARIANTS[variant], className);
+}
 
 export function Button({
   href,

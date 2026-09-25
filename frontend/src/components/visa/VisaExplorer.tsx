@@ -1,11 +1,12 @@
 "use client";
 
 import { ArrowUpRight, Search } from "lucide-react";
-import Link from "next/link";
 import { useMemo, useState } from "react";
 
+import { WhatsAppLink } from "@/components/layout/WhatsAppLink";
 import { Reveal } from "@/components/motion/Reveal";
 import type { VisaCountry } from "@/lib/types";
+import { visaWhatsAppMessage } from "@/lib/whatsapp";
 
 // Fees and timelines are only shown once the agency has published them.
 // Null, 0 and "On enquiry" all mean "not published yet".
@@ -46,12 +47,13 @@ export function VisaExplorer({ countries }: { countries: readonly VisaCountry[] 
       {filtered.length === 0 ? (
         <p className="mt-10 text-center text-sm text-text-muted">
           Don&apos;t see your destination? We can still help —{" "}
-          <Link
-            href="/contact?topic=Visa%20assistance"
+          <WhatsAppLink
+            message={visaWhatsAppMessage()}
+            fallbackHref="/contact?topic=Visa%20assistance"
             className="font-medium text-brand-blue-strong hover:underline"
           >
             tell us where you&apos;re headed
-          </Link>
+          </WhatsAppLink>
           .
         </p>
       ) : (
@@ -86,8 +88,9 @@ export function VisaExplorer({ countries }: { countries: readonly VisaCountry[] 
                       : "Contact us for fees and timelines"}
                   </p>
                 </div>
-                <Link
-                  href={`/contact?topic=${encodeURIComponent(`Visa assistance for ${country.country_name}`)}`}
+                <WhatsAppLink
+                  message={visaWhatsAppMessage(country.country_name)}
+                  fallbackHref={`/contact?topic=${encodeURIComponent(`Visa assistance for ${country.country_name}`)}`}
                   className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-brand-blue-strong transition-colors hover:text-brand-navy-accent"
                 >
                   Enquire
@@ -95,7 +98,7 @@ export function VisaExplorer({ countries }: { countries: readonly VisaCountry[] 
                     size={14}
                     className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                   />
-                </Link>
+                </WhatsAppLink>
               </div>
               </Reveal>
             );

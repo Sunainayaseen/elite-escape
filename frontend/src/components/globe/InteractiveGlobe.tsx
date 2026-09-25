@@ -74,7 +74,7 @@ export default function InteractiveGlobe({
   fallback?: React.ReactNode;
 }) {
   const wrapRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasHostRef = useRef<HTMLDivElement>(null);
   const pinRefs = useRef(new Map<string, HTMLElement>());
   const reduced = usePrefersReducedMotion();
   const [supported, setSupported] = useState(true);
@@ -92,8 +92,19 @@ export default function InteractiveGlobe({
 
   useEffect(() => {
     const wrap = wrapRef.current;
-    const canvas = canvasRef.current;
-    if (!wrap || !canvas) return;
+    const host = canvasHostRef.current;
+    if (!wrap || !host) return;
+
+    // Each run gets its own canvas. Cleanup releases the WebGL context, and a canvas whose context
+    // was lost can never draw again, so reusing one (Strict Mode, or a re-run when `reduced`
+    // changes) would leave a blank rectangle where the globe should be.
+    const canvas = document.createElement("canvas");
+    canvas.className = cn("h-full w-full", !decorative && "cursor-grab touch-pan-y");
+    if (!decorative) {
+      canvas.setAttribute("role", "img");
+      canvas.setAttribute("aria-label", "Interactive globe of Elite Escape destinations");
+    }
+    host.prepend(canvas);
 
     let disposed = false;
     let raf = 0;
@@ -259,14 +270,18 @@ export default function InteractiveGlobe({
       canvas.removeEventListener("pointermove", onMove);
       canvas.removeEventListener("pointerup", onUp);
       canvas.removeEventListener("pointercancel", onUp);
-      globe?.destroy();
-      // Release the GPU context immediately instead of waiting for garbage collection.
-      try {
-        const gl = (canvas.getContext("webgl2") || canvas.getContext("webgl")) as WebGLRenderingContext | null;
-        gl?.getExtension("WEBGL_lose_context")?.loseContext();
-      } catch {
-        /* context already gone */
+      if (globe) {
+        globe.destroy();
+        // Release the GPU context immediately instead of waiting for garbage collection. Only when
+        // cobe created one: calling getContext here otherwise would create a context just to lose it.
+        try {
+          const gl = (canvas.getContext("webgl2") || canvas.getContext("webgl")) as WebGLRenderingContext | null;
+          gl?.getExtension("WEBGL_lose_context")?.loseContext();
+        } catch {
+          /* context already gone */
+        }
       }
+      canvas.remove();
     };
   }, [points, decorative, reduced]);
 
@@ -287,15 +302,11 @@ export default function InteractiveGlobe({
       className={cn("relative aspect-square w-full", className)}
     >
       <div
+        ref={canvasHostRef}
         className="absolute"
         style={{ inset: `${((1 - CANVAS_OVERSCAN) / 2) * 100}%` }}
       >
-        <canvas
-          ref={canvasRef}
-          role={decorative ? undefined : "img"}
-          aria-label={decorative ? undefined : "Interactive globe of Elite Escape destinations"}
-          className={cn("h-full w-full", !decorative && "cursor-grab touch-pan-y")}
-        />
+        {/* The canvas is created and inserted here by the effect above. */}
 
         {!decorative &&
           points.map((p) => {

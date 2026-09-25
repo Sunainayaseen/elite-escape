@@ -7,6 +7,16 @@ export function packageWhatsAppMessage(packageTitle: string) {
   return `Hello Elite Escape Tourism, I am interested in the ${packageTitle} package. Please share more details.`;
 }
 
+export function visaWhatsAppMessage(country?: string) {
+  return country
+    ? `Hello Elite Escape Tourism, I need visa assistance for ${country}. Please guide me on the process.`
+    : "Hello Elite Escape Tourism, I need visa assistance. Please guide me on the process.";
+}
+
+export function seasonalWhatsAppMessage(tourName: string) {
+  return `Hello Elite Escape Tourism, I am interested in the ${tourName} seasonal tour. Please share more details.`;
+}
+
 /** Returns null when no number is configured, so callers can hide the button. */
 export function whatsappUrl(number: string, message: string): string | null {
   const digits = number.replace(/\D/g, "");

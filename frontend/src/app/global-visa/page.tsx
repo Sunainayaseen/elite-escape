@@ -3,13 +3,14 @@ import type { Metadata } from "next";
 import { CTASection } from "@/components/home/CTASection";
 import { FAQ } from "@/components/home/FAQ";
 import { PageHero } from "@/components/layout/PageHero";
+import { WhatsAppLink } from "@/components/layout/WhatsAppLink";
 import { Reveal } from "@/components/motion/Reveal";
 import { SectionHeader } from "@/components/motion/SectionHeader";
 import { TiltCard } from "@/components/motion/TiltCard";
-import { Button } from "@/components/ui/Button";
 import { VisaExplorer } from "@/components/visa/VisaExplorer";
 import { VisaStamps } from "@/components/visa/VisaStamps";
 import { getVisaCountries } from "@/lib/data";
+import { visaWhatsAppMessage } from "@/lib/whatsapp";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
@@ -90,6 +91,7 @@ export default async function GlobalVisaPage() {
       />
 
       <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
+        <h2 className="sr-only">How visa assistance works</h2>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {STEPS.map((item, i) => (
             <Reveal key={item.step} delay={i * 0.1}>
@@ -133,7 +135,13 @@ export default async function GlobalVisaPage() {
           ))}
         </ul>
         <div className="mt-10 flex justify-center">
-          <Button href="/contact?topic=Visa%20assistance">Get Visa Assistance</Button>
+          <WhatsAppLink
+            message={visaWhatsAppMessage()}
+            fallbackHref="/contact?topic=Visa%20assistance"
+            variant="primary"
+          >
+            Get Visa Assistance
+          </WhatsAppLink>
         </div>
       </section>
 

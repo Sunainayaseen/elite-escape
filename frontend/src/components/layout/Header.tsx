@@ -17,6 +17,20 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const progressRef = useRef<HTMLSpanElement>(null);
   const pathname = usePathname();
+  const toggleRef = useRef<HTMLButtonElement>(null);
+
+  // Keyboard users must be able to dismiss the mobile menu: Escape closes it and returns focus to the toggle.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+        toggleRef.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
 
   useEffect(() => {
     let frame = 0;
@@ -122,6 +136,7 @@ export function Header() {
         </div>
 
         <button
+          ref={toggleRef}
           type="button"
           onClick={() => setOpen((v) => !v)}
           className="text-white lg:hidden"

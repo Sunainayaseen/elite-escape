@@ -4,15 +4,23 @@ import Link from "next/link";
 
 import { PageHero } from "@/components/layout/PageHero";
 import { Reveal } from "@/components/motion/Reveal";
+import { Button } from "@/components/ui/Button";
 import { getBlogPosts } from "@/lib/data";
 import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = pageMetadata({
-  title: "Travel Blog",
-  description:
-    "Travel guides, visa advice and destination inspiration from Elite Escape Tourism.",
-  path: "/blog",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const posts = await getBlogPosts();
+  return {
+    ...pageMetadata({
+      title: "Travel Blog",
+      description:
+        "Travel guides, visa advice and destination inspiration from Elite Escape Tourism.",
+      path: "/blog",
+    }),
+    // An empty listing is thin content; keep it out of search results until articles are published.
+    ...(posts.length === 0 ? { robots: { index: false, follow: true } } : {}),
+  };
+}
 
 function formatDate(value: string | null) {
   return value
@@ -33,9 +41,22 @@ export default async function BlogPage() {
 
       <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
         {posts.length === 0 ? (
-          <p className="py-16 text-center text-sm text-text-muted">
-            No articles yet. Check back soon.
-          </p>
+          <div className="mx-auto max-w-xl py-12 text-center">
+            <h2 className="font-serif text-2xl font-semibold text-text-ink">
+              Our first articles are on the way
+            </h2>
+            <p className="mt-3 text-text-muted">
+              In the meantime, browse our holiday packages or ask our team about your visa.
+            </p>
+            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <Button href="/holidays" arrow>
+                Browse Holidays
+              </Button>
+              <Button href="/global-visa" variant="outline">
+                Visa Assistance
+              </Button>
+            </div>
+          </div>
         ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {posts.map((post, i) => (

@@ -2,13 +2,16 @@ import type { Metadata } from "next";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import type { ReactNode } from "react";
 
 import { CTASection } from "@/components/home/CTASection";
 import { PageHero } from "@/components/layout/PageHero";
+import { WhatsAppLink } from "@/components/layout/WhatsAppLink";
 import { Reveal } from "@/components/motion/Reveal";
 import { TiltCard } from "@/components/motion/TiltCard";
 import { SEASONAL_TOURS } from "@/lib/site-data";
 import { pageMetadata } from "@/lib/seo";
+import { seasonalWhatsAppMessage } from "@/lib/whatsapp";
 
 export const metadata: Metadata = pageMetadata({
   title: "Seasonal Tours",
@@ -16,6 +19,34 @@ export const metadata: Metadata = pageMetadata({
     "Seasonal holidays timed for the best time to go, from Eid in the Maldives and winter in the Swiss Alps to summer in Bali and cherry blossom season in Japan. Enquire and we'll tailor it to you.",
   path: "/seasonal-tours",
 });
+
+// Enquiry-only tours (no package page yet) open WhatsApp directly; the rest link to their package.
+function TourLink({
+  tour,
+  className,
+  children,
+}: {
+  tour: (typeof SEASONAL_TOURS)[number];
+  className: string;
+  children: ReactNode;
+}) {
+  if (tour.href === "/contact") {
+    return (
+      <WhatsAppLink
+        message={seasonalWhatsAppMessage(tour.name)}
+        fallbackHref={`/contact?topic=${encodeURIComponent(tour.name)}`}
+        className={className}
+      >
+        {children}
+      </WhatsAppLink>
+    );
+  }
+  return (
+    <Link href={tour.href} className={className}>
+      {children}
+    </Link>
+  );
+}
 
 export default function SeasonalToursPage() {
   return (
@@ -31,8 +62,8 @@ export default function SeasonalToursPage() {
           {SEASONAL_TOURS.map((tour, i) => (
             <Reveal key={tour.name} delay={(i % 3) * 0.1} y={20}>
               <TiltCard className="rounded-2xl">
-                <Link
-                  href={tour.href === "/contact" ? `/contact?topic=${encodeURIComponent(tour.name)}` : tour.href}
+                <TourLink
+                  tour={tour}
                   className="group relative block h-72 overflow-hidden rounded-2xl shadow-lg shadow-brand-blue/10"
                 >
                   <Image
@@ -65,7 +96,7 @@ export default function SeasonalToursPage() {
                       </p>
                     </div>
                   </div>
-                </Link>
+                </TourLink>
               </TiltCard>
             </Reveal>
           ))}

@@ -3,6 +3,7 @@
 import { CheckCircle2, Loader2, Send } from "lucide-react";
 import { type FormEvent, useState } from "react";
 
+import { WhatsAppLink } from "@/components/layout/WhatsAppLink";
 import { apiRequest } from "@/lib/api";
 
 const FIELD_CLASSES =
@@ -11,6 +12,7 @@ const FIELD_CLASSES =
 export function ContactForm({ defaultMessage = "" }: { defaultMessage?: string }) {
   const [status, setStatus] = useState<"idle" | "submitting" | "sent">("idle");
   const [error, setError] = useState<string | null>(null);
+  const [waMessage, setWaMessage] = useState("");
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -29,6 +31,9 @@ export function ContactForm({ defaultMessage = "" }: { defaultMessage?: string }
           website: data.get("website"),
         },
       });
+      setWaMessage(
+        `Hello Elite Escape Tourism, I just sent an enquiry through your website. My name is ${data.get("name")}. ${data.get("message")}`.slice(0, 900),
+      );
       setStatus("sent");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
@@ -45,6 +50,13 @@ export function ContactForm({ defaultMessage = "" }: { defaultMessage?: string }
           Our team will get back to you soon. For anything urgent, message us
           on WhatsApp.
         </p>
+        <WhatsAppLink
+          message={waMessage}
+          variant="primary"
+          className="mt-2 bg-[#25D366] text-white shadow-[#25D366]/30 hover:bg-[#1ebe5b]"
+        >
+          Continue on WhatsApp
+        </WhatsAppLink>
       </div>
     );
   }
@@ -62,11 +74,19 @@ export function ContactForm({ defaultMessage = "" }: { defaultMessage?: string }
         className="absolute left-[-9999px] h-0 w-0 opacity-0"
       />
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <input name="name" required maxLength={150} placeholder="Full name" className={FIELD_CLASSES} />
+        <input
+          name="name"
+          required
+          maxLength={150}
+          aria-label="Full name"
+          placeholder="Full name"
+          className={FIELD_CLASSES}
+        />
         <input
           name="email"
           required
           type="email"
+          aria-label="Email address"
           placeholder="Email address"
           className={FIELD_CLASSES}
         />
@@ -75,6 +95,7 @@ export function ContactForm({ defaultMessage = "" }: { defaultMessage?: string }
         name="phone"
         type="tel"
         maxLength={40}
+        aria-label="Phone number (optional)"
         placeholder="Phone number (optional)"
         className={FIELD_CLASSES}
       />
@@ -84,6 +105,7 @@ export function ContactForm({ defaultMessage = "" }: { defaultMessage?: string }
         rows={5}
         maxLength={4000}
         defaultValue={defaultMessage}
+        aria-label="Your message"
         placeholder="Tell us where you want to go, and when"
         className={`${FIELD_CLASSES} resize-none`}
       />

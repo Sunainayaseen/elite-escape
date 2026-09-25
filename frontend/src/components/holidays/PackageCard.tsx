@@ -2,9 +2,11 @@ import { Clock3, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
+import { WhatsAppLink } from "@/components/layout/WhatsAppLink";
 import { Button } from "@/components/ui/Button";
 import { formatPrice } from "@/lib/format";
 import type { Package } from "@/lib/types";
+import { packageWhatsAppMessage } from "@/lib/whatsapp";
 
 const MAX_TAGS = 3;
 
@@ -34,14 +36,14 @@ export function PackageCard({ pkg }: { pkg: Package }) {
         <p className="text-xs font-semibold uppercase tracking-wide text-brand-blue-strong">
           {pkg.country}
         </p>
-        <h3 className="mt-1.5 font-serif text-xl font-semibold text-text-ink">
+        <h2 className="mt-1.5 font-serif text-xl font-semibold text-text-ink">
           <Link
             href={href}
             className="hover:text-brand-blue-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-teal-light"
           >
             {pkg.title}
           </Link>
-        </h3>
+        </h2>
 
         <p className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-text-muted">
           <span className="flex items-center gap-1.5">
@@ -79,13 +81,14 @@ export function PackageCard({ pkg }: { pkg: Package }) {
               <Button href={href} className="flex-1 px-4 py-2.5">
                 View Package
               </Button>
-              <Button
-                href={`/contact?topic=${encodeURIComponent(pkg.title)}`}
+              <WhatsAppLink
+                message={packageWhatsAppMessage(pkg.title)}
+                fallbackHref={`/contact?topic=${encodeURIComponent(pkg.title)}`}
                 variant="outline"
                 className="flex-1 px-4 py-2.5"
               >
                 Enquire Now
-              </Button>
+              </WhatsAppLink>
             </div>
           </div>
         </div>

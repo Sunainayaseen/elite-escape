@@ -1,6 +1,9 @@
 // Sticky bottom bar for phones and tablets; the desktop layout has a sticky side panel instead.
 // `data-sticky-cta` lets globals.css lift the floating WhatsApp button above this bar.
-export function MobileEnquireBar({ price }: { price: string }) {
+import { WhatsAppLink } from "@/components/layout/WhatsAppLink";
+import { packageWhatsAppMessage } from "@/lib/whatsapp";
+
+export function MobileEnquireBar({ price, title }: { price: string; title: string }) {
   return (
     <div
       data-sticky-cta
@@ -11,12 +14,13 @@ export function MobileEnquireBar({ price }: { price: string }) {
           <p className="text-[11px] text-text-muted">Per person</p>
           <p className="truncate font-serif text-base font-semibold text-text-ink">{price}</p>
         </div>
-        <a
-          href="#enquire"
+        <WhatsAppLink
+          message={packageWhatsAppMessage(title)}
+          fallbackHref="#enquire"
           className="inline-flex shrink-0 items-center justify-center rounded-full bg-brand-navy-accent px-6 py-3 text-sm font-semibold text-white transition-colors duration-300 hover:bg-brand-blue focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-teal-light"
         >
           Enquire Now
-        </a>
+        </WhatsAppLink>
       </div>
     </div>
   );

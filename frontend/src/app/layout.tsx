@@ -5,6 +5,7 @@ import "./globals.css";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { ScrollToTop } from "@/components/layout/ScrollToTop";
+import { WhatsAppProvider } from "@/components/layout/WhatsAppLink";
 import { MotionProvider } from "@/components/motion/MotionProvider";
 import { SiteChrome } from "@/components/layout/SiteChrome";
 import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
@@ -66,6 +67,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
           data={organizationSchema([settings.instagram_url, settings.facebook_url, settings.x_url])}
         />
         <MotionProvider>
+        <WhatsAppProvider number={settings.whatsapp_number}>
         <SiteChrome
           header={<Header />}
           footer={<Footer settings={settings} hasBlog={posts.length > 0} />}
@@ -78,6 +80,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         >
           {children}
         </SiteChrome>
+        </WhatsAppProvider>
         </MotionProvider>
       </body>
     </html>
