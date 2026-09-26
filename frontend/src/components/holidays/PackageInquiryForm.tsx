@@ -5,7 +5,9 @@ import { type FormEvent, useState } from "react";
 
 import { useWhatsAppNumber } from "@/components/layout/WhatsAppLink";
 import { Button } from "@/components/ui/Button";
+import { DateField } from "@/components/ui/DateField";
 import { apiRequest } from "@/lib/api";
+import { formatTravelDate } from "@/lib/format";
 import { whatsappUrl } from "@/lib/whatsapp";
 
 const FIELD =
@@ -27,6 +29,7 @@ export function PackageInquiryForm({
   const [status, setStatus] = useState<"idle" | "submitting" | "sent">("idle");
   const [error, setError] = useState<string | null>(null);
   const [chatUrl, setChatUrl] = useState<string | null>(null);
+  const [travelDate, setTravelDate] = useState("");
   const whatsappNumber = useWhatsAppNumber();
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -47,7 +50,7 @@ export function PackageInquiryForm({
             `Hello Elite Escape Tourism, I'd like to enquire about the ${packageTitle} package.`,
             `Name: ${data.get("name")}`,
             `Phone: ${data.get("phone")}`,
-            `Preferred travel date: ${data.get("travel_date")}`,
+            `Preferred travel date: ${travelDate ? formatTravelDate(travelDate) : ""}`,
             `Travelers: ${Number(data.get("travelers")) || 1}`,
             notes && `Notes: ${notes}`,
           ]
@@ -130,13 +133,16 @@ export function PackageInquiryForm({
       </div>
       <input name="email" required type="email" placeholder="Email address" className={FIELD} />
       <div className="grid grid-cols-[1fr_96px] gap-3">
-        <input
+        <DateField
           name="travel_date"
           required
-          type="date"
+          value={travelDate}
+          onChange={setTravelDate}
           min={todayIso()}
-          aria-label="Preferred travel date"
-          className={FIELD}
+          label="Preferred travel date"
+          placeholder="Travel date"
+          inputClassName={FIELD}
+          overlayClassName="px-4"
         />
         <input
           name="travelers"

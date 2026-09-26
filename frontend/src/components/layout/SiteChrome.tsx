@@ -25,8 +25,15 @@ export function SiteChrome({
 
   return (
     <>
+      {/* First tab stop: lets keyboard and screen-reader users jump past the navigation. */}
+      <a
+        href="#main-content"
+        className="sr-only z-[60] rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-[#081a2c] shadow-lg focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-teal-light"
+      >
+        Skip to content
+      </a>
       {header}
-      <main className="flex-1 overflow-x-clip">
+      <main id="main-content" tabIndex={-1} className="flex-1 overflow-x-clip focus:outline-none">
         <PageTransition>{children}</PageTransition>
       </main>
       {footer}

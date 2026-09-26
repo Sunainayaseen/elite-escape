@@ -1,4 +1,4 @@
-import { Check, Clock3, MapPin, Users, X } from "lucide-react";
+import { ArrowRight, Check, Clock3, MapPin, Users, X } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,7 +8,9 @@ import type { CSSProperties } from "react";
 import { GalleryLightbox } from "@/components/holidays/GalleryLightbox";
 import { ItineraryAccordion } from "@/components/holidays/ItineraryAccordion";
 import { MobileEnquireBar } from "@/components/holidays/MobileEnquireBar";
+import { PackageCard } from "@/components/holidays/PackageCard";
 import { PackageInquiryForm } from "@/components/holidays/PackageInquiryForm";
+import { PackageShare } from "@/components/holidays/PackageShare";
 import { TimelineProgress } from "@/components/holidays/TimelineProgress";
 import { Parallax } from "@/components/motion/Parallax";
 import { Reveal } from "@/components/motion/Reveal";
@@ -16,6 +18,7 @@ import { getPackage as fetchPackage, getPackages, getSiteSettings } from "@/lib/
 import { formatPrice } from "@/lib/format";
 import { packageWhatsAppMessage, whatsappUrl } from "@/lib/whatsapp";
 import { breadcrumbSchema, packageSchema, pageMetadata } from "@/lib/seo";
+import { SITE_URL } from "@/lib/site-url";
 import { JsonLd } from "@/components/seo/JsonLd";
 
 // CSS-only entrance for the hero copy (.fade-up in globals.css); visible without JavaScript.
@@ -53,8 +56,19 @@ export default async function PackageDetailPage({
   params: Promise<{ category: string; slug: string }>;
 }) {
   const { category, slug } = await params;
-  const [pkg, settings] = await Promise.all([getPackage(category, slug), getSiteSettings()]);
+  const [pkg, settings, allPackages] = await Promise.all([
+    getPackage(category, slug),
+    getSiteSettings(),
+    getPackages(),
+  ]);
   if (!pkg) notFound();
+
+  // "You may also like": the same region first, then the rest, never the package itself.
+  const others = allPackages.filter((p) => p.slug !== pkg.slug);
+  const related = [
+    ...others.filter((p) => p.category === pkg.category),
+    ...others.filter((p) => p.category !== pkg.category),
+  ].slice(0, 3);
 
   const price = formatPrice(pkg);
   const whatsapp = whatsappUrl(settings.whatsapp_number, packageWhatsAppMessage(pkg.title));
@@ -245,11 +259,46 @@ export default async function PackageDetailPage({
                     <span className="sr-only"> about {pkg.title} (opens in a new tab)</span>
                   </a>
                 )}
+
+                <div className="mt-5 border-t border-line/10 pt-4">
+                  <PackageShare title={pkg.title} url={`${SITE_URL}/holidays/${pkg.category}/${pkg.slug}`} />
+                </div>
               </div>
             </Reveal>
           </div>
         </div>
       </section>
+
+      {related.length > 0 && (
+        <section aria-labelledby="related-title" className="border-t border-line/10 bg-bg-navy">
+          <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-blue-strong">
+                  Keep exploring
+                </p>
+                <h2 id="related-title" className="mt-2 font-serif text-2xl font-semibold text-text-ink sm:text-3xl">
+                  You may also like
+                </h2>
+              </div>
+              <Link
+                href="/holidays"
+                className="group inline-flex items-center gap-1.5 text-sm font-semibold text-brand-blue-strong hover:text-brand-navy-accent"
+              >
+                All holiday packages
+                <ArrowRight size={15} aria-hidden className="transition-transform group-hover:translate-x-0.5" />
+              </Link>
+            </div>
+            <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {related.map((p, i) => (
+                <Reveal key={p.slug} delay={i * 0.08} y={20}>
+                  <PackageCard pkg={p} headingLevel="h3" />
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <MobileEnquireBar price={price} title={pkg.title} />
     </>

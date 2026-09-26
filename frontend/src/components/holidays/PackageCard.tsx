@@ -10,7 +10,15 @@ import { packageWhatsAppMessage } from "@/lib/whatsapp";
 
 const MAX_TAGS = 3;
 
-export function PackageCard({ pkg }: { pkg: Package }) {
+export function PackageCard({
+  pkg,
+  headingLevel = "h2",
+}: {
+  pkg: Package;
+  /** "h3" when the cards sit under a section heading of their own (e.g. related packages). */
+  headingLevel?: "h2" | "h3";
+}) {
+  const Heading = headingLevel;
   const href = `/holidays/${pkg.category}/${pkg.slug}`;
   const tags = pkg.tour_types.slice(0, MAX_TAGS);
 
@@ -36,14 +44,14 @@ export function PackageCard({ pkg }: { pkg: Package }) {
         <p className="text-xs font-semibold uppercase tracking-wide text-brand-blue-strong">
           {pkg.country}
         </p>
-        <h2 className="mt-1.5 font-serif text-xl font-semibold text-text-ink">
+        <Heading className="mt-1.5 font-serif text-xl font-semibold text-text-ink">
           <Link
             href={href}
             className="hover:text-brand-blue-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-teal-light"
           >
             {pkg.title}
           </Link>
-        </h2>
+        </Heading>
 
         <p className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-text-muted">
           <span className="flex items-center gap-1.5">

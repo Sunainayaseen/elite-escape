@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
-import { Clock, Mail, MapPin, Phone } from "lucide-react";
+import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 
 import { ContactForm } from "@/components/contact/ContactForm";
+import { OfficeMap } from "@/components/contact/OfficeMap";
+import { WhatsAppLink } from "@/components/layout/WhatsAppLink";
 import { PageHero } from "@/components/layout/PageHero";
 import { Reveal } from "@/components/motion/Reveal";
 import { getSiteSettings } from "@/lib/data";
@@ -85,10 +87,35 @@ export default async function ContactPage({
                 <Clock size={16} className="text-brand-blue" />
                 {WORKING_HOURS}
               </div>
+              <WhatsAppLink
+                message="Hello Elite Escape Tourism, I'd like some help planning a trip."
+                className="mt-1 inline-flex w-fit items-center gap-2 rounded-full bg-[#25D366] px-4 py-2 text-sm font-semibold text-[#07361c] transition-colors hover:bg-[#1fbe5a] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#25D366]"
+              >
+                <MessageCircle size={16} aria-hidden />
+                Chat on WhatsApp
+              </WhatsAppLink>
             </div>
           </Reveal>
         </div>
       </section>
+
+      {OFFICES.length > 0 && (
+        <section aria-labelledby="visit-title" className="mx-auto max-w-7xl px-6 pb-20 sm:pb-28">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-blue-strong">
+            Visit us
+          </p>
+          <h2 id="visit-title" className="mt-2 font-serif text-2xl font-semibold text-text-ink sm:text-3xl">
+            Our offices
+          </h2>
+          <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
+            {OFFICES.map((office, i) => (
+              <Reveal key={office.city} delay={i * 0.08} y={20}>
+                <OfficeMap city={office.city} address={office.address} />
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      )}
     </>
   );
 }

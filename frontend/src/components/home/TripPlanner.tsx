@@ -1,10 +1,12 @@
 "use client";
 
-import { ArrowRight, CalendarDays, ChevronDown, Minus, Plus } from "lucide-react";
+import { ArrowRight, ChevronDown, Minus, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { type FormEvent, type ReactNode, useId, useRef, useState } from "react";
+import { type FormEvent, type ReactNode, useId, useState } from "react";
 
 import { useWhatsAppNumber } from "@/components/layout/WhatsAppLink";
+import { DateField } from "@/components/ui/DateField";
+import { formatTravelDate } from "@/lib/format";
 import type { Package } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { whatsappUrl } from "@/lib/whatsapp";
@@ -17,10 +19,6 @@ const MAX_TRAVELERS = 50;
 const INPUT =
   "block w-full min-w-0 appearance-none bg-transparent py-0.5 text-sm font-semibold text-text-ink outline-none [color-scheme:light]";
 
-function formatDate(iso: string) {
-  const d = new Date(`${iso}T00:00:00`);
-  return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
-}
 
 function Segment({
   htmlFor,
@@ -52,68 +50,6 @@ function Segment({
         {label}
       </label>
       {children}
-    </div>
-  );
-}
-
-/**
- * A native date input (keyboard and screen-reader friendly, mobile date pickers) that reads
- * "Add date" / "12 Oct 2026" instead of the browser's "mm/dd/yyyy". The formatted text is an
- * overlay; while the input has focus the native value shows, so typing a date still works.
- */
-function DateField({
-  id,
-  value,
-  min,
-  onChange,
-  describedBy,
-  invalid,
-}: {
-  id: string;
-  value: string;
-  min: string;
-  onChange: (value: string) => void;
-  describedBy?: string;
-  invalid?: boolean;
-}) {
-  const ref = useRef<HTMLInputElement>(null);
-
-  function openPicker() {
-    try {
-      ref.current?.showPicker?.();
-    } catch {
-      /* not allowed here (e.g. cross-origin iframe); the input still works by keyboard */
-    }
-  }
-
-  return (
-    <div className="relative">
-      <input
-        ref={ref}
-        id={id}
-        type="date"
-        min={min}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        onClick={openPicker}
-        aria-describedby={describedBy}
-        aria-invalid={invalid || undefined}
-        className={cn(
-          INPUT,
-          "peer cursor-pointer text-transparent focus:text-text-ink",
-          // Chrome/Edge: stretch the invisible picker button over the whole field.
-          "[&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0",
-        )}
-      />
-      <span
-        aria-hidden
-        className="pointer-events-none absolute inset-0 flex items-center justify-between gap-2 text-sm peer-focus:hidden"
-      >
-        <span className={value ? "truncate font-semibold text-text-ink" : "truncate text-text-muted"}>
-          {value ? formatDate(value) : "Add date"}
-        </span>
-        <CalendarDays size={15} className="shrink-0 text-text-muted" />
-      </span>
     </div>
   );
 }
@@ -172,8 +108,8 @@ export function TripPlanner({ packages }: { packages: readonly Package[] }) {
       `${type ? `${type} trip` : "Trip"}${destination ? ` to ${destination}` : ""}`,
       departure
         ? returnDate
-          ? `${formatDate(departure)} – ${formatDate(returnDate)}`
-          : `from ${formatDate(departure)}`
+          ? `${formatTravelDate(departure)} – ${formatTravelDate(returnDate)}`
+          : `from ${formatTravelDate(departure)}`
         : "",
       `${travelers} ${travelers === 1 ? "traveler" : "travelers"}`,
     ].filter(Boolean);
@@ -225,7 +161,13 @@ export function TripPlanner({ packages }: { packages: readonly Package[] }) {
           </Segment>
 
           <Segment htmlFor={`${uid}-from`} label="Departure">
-            <DateField id={`${uid}-from`} value={departure} min={today} onChange={changeDeparture} />
+            <DateField
+              id={`${uid}-from`}
+              value={departure}
+              min={today}
+              onChange={changeDeparture}
+              inputClassName={INPUT}
+            />
           </Segment>
 
           <Segment htmlFor={`${uid}-to`} label="Return">
@@ -239,6 +181,7 @@ export function TripPlanner({ packages }: { packages: readonly Package[] }) {
               }}
               describedBy={error ? `${uid}-error` : undefined}
               invalid={!!error}
+              inputClassName={INPUT}
             />
           </Segment>
 
