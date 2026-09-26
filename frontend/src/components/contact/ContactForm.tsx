@@ -3,8 +3,9 @@
 import { CheckCircle2, Loader2, Send } from "lucide-react";
 import { type FormEvent, useState } from "react";
 
-import { WhatsAppLink } from "@/components/layout/WhatsAppLink";
-import { apiRequest } from "@/lib/api";
+import { useWhatsAppNumber, WhatsAppLink } from "@/components/layout/WhatsAppLink";
+import { API_ENABLED, apiRequest } from "@/lib/api";
+import { whatsappUrl } from "@/lib/whatsapp";
 
 const FIELD_CLASSES =
   "w-full rounded-xl border border-line/15 bg-bg-navy-light px-4 py-3 text-sm text-text-ink outline-none transition-all duration-300 placeholder:text-text-muted focus:outline-none focus-visible:outline-none focus:-translate-y-0.5 focus:border-brand-blue/60 focus:bg-white focus:shadow-lg focus:shadow-brand-blue/10 focus:ring-4 focus:ring-brand-blue/10";
@@ -13,12 +14,39 @@ export function ContactForm({ defaultMessage = "" }: { defaultMessage?: string }
   const [status, setStatus] = useState<"idle" | "submitting" | "sent">("idle");
   const [error, setError] = useState<string | null>(null);
   const [waMessage, setWaMessage] = useState("");
+  const whatsappNumber = useWhatsAppNumber();
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
     setStatus("submitting");
     setError(null);
+
+    // Site-only deploy (no backend): the enquiry goes straight to a WhatsApp chat instead.
+    if (!API_ENABLED) {
+      if (data.get("website")) return setStatus("sent");
+      const message = [
+        "Hello Elite Escape Tourism, I have an enquiry.",
+        `Name: ${data.get("name")}`,
+        `Email: ${data.get("email")}`,
+        data.get("phone") && `Phone: ${data.get("phone")}`,
+        `${data.get("message")}`,
+      ]
+        .filter(Boolean)
+        .join("\n")
+        .slice(0, 1500);
+      const url = whatsappUrl(whatsappNumber, message);
+      if (!url) {
+        setError("Please contact us by phone or email for now.");
+        setStatus("idle");
+        return;
+      }
+      window.open(url, "_blank", "noopener,noreferrer");
+      setWaMessage(message);
+      setStatus("sent");
+      return;
+    }
+
     try {
       await apiRequest("/api/inquiries", {
         body: {
@@ -126,7 +154,7 @@ export function ContactForm({ defaultMessage = "" }: { defaultMessage?: string }
           </>
         ) : (
           <>
-            Send Enquiry
+            {API_ENABLED ? "Send Enquiry" : "Send on WhatsApp"}
             <Send
               size={15}
               className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-1"

@@ -11,7 +11,7 @@ Yeh guide batati hai ke nayi Elite Escape website ko `eliteescapetourism.com` pa
 
 > **Email par koi asar nahi parega.** Company ki email (`@eliteescapetourism.com`, 5 mailboxes) purane Hostinger hosting plan par hai. Woh plan **cancel nahi karna**, aur DNS mein email wale records (**MX**, **TXT**) **nahi chhedne**.
 
-Har step order mein karein. Aakhir mein "Agar koi masla aaye" wala hissa bhi hai.
+Har step order mein karein. Pehle website ek test address (`new.eliteescapetourism.com`) par chalegi, aur purani site tab tak live rahegi. Sab theek ho to Step 7 mein asli domain par shift karenge. Aakhir mein "Agar koi masla aaye" wala hissa bhi hai.
 
 ---
 
@@ -33,21 +33,20 @@ Har step order mein karein. Aakhir mein "Agar koi masla aaye" wala hissa bhi hai
 
 ---
 
-## Step 2: Domain ko VPS ki taraf karein (DNS)
+## Step 2: Test address ke DNS records banayein
+
+Pehle website ek **test address** `new.eliteescapetourism.com` par chalayenge. Is dauran purani WordPress site `eliteescapetourism.com` par waise hi chalti rahegi. Is step mein koi purana record **nahi badalna**, sirf naye records banane hain.
 
 1. hPanel → **Domains** → `eliteescapetourism.com` → **DNS / Nameservers** kholein.
-2. Wahan records ki list hogi. **Sirf** yeh records badlein:
+2. Yeh **teen naye** records banayein (**Add record**). Har ek mein **Points to / Value** VPS ka IP hai, aur TTL jo pehle se likha ho wahi rehne dein:
 
-   | Type | Name | Kya karna hai |
+   | Type | Name | Points to |
    | --- | --- | --- |
-   | `A` | `@` | Value mein VPS ka IP likhein |
-   | `A` | `www` | VPS ka IP. Agar `www` ka `CNAME` record pehle se hai to use delete karke yeh `A` record banayein. |
-   | `A` | `api` | **Naya** record banayein, value mein VPS ka IP |
-   | `AAAA` | `@` aur `www` | **Delete** karein. Yeh purani site ke IPv6 address hain. Rehne diye to kuch logon ko purani site dikhti rahegi. |
+   | `A` | `api` | VPS ka IP |
+   | `A` | `new` | VPS ka IP |
+   | `A` | `www.new` | VPS ka IP |
 
-3. **In ko bilkul na chheren:** `MX`, `TXT`, aur jin records ke naam mein `mail`, `autodiscover`, `autoconfig`, `_dmarc` ya `hostingermail` ho. Yeh sab email ke liye hain.
-4. Agar purani WordPress site par **Hostinger CDN** on hai (website ke Dashboard par "CDN" ka hara nishaan), to DNS badalne se pehle use band kar dein. Warna domain purani site par hi jaata reh sakta hai.
-5. DNS badalne mein 5 minute se kuch ghante lag sakte hain. Check karne ke liye https://dnschecker.org par `eliteescapetourism.com` aur `api.eliteescapetourism.com` likh kar dekhein ke VPS ka IP aa raha hai ya nahi.
+3. 5 se 30 minute baad https://dnschecker.org par `new.eliteescapetourism.com` likh kar dekhein. VPS ka IP nazar aana chahiye.
 
 ---
 
@@ -100,15 +99,18 @@ Har step order mein karein. Aakhir mein "Agar koi masla aaye" wala hissa bhi hai
    nano .env.prod
    ```
 
-4. File mein yeh values bharein (arrow keys se upar neeche jaayein):
+4. File mein yeh values bharein (arrow keys se upar neeche jaayein). **Test ke dauran** domain wali lines mein `new.` lagana hai:
 
    | Line | Kya likhna hai |
    | --- | --- |
+   | `SITE_DOMAIN=` | `new.eliteescapetourism.com` |
+   | `API_DOMAIN=` | `api.eliteescapetourism.com` (jaisa likha hai waisa rehne dein) |
+   | `CORS_ORIGINS=` | `https://new.eliteescapetourism.com` |
+   | `FRONTEND_URL=` | `https://new.eliteescapetourism.com` |
    | `POSTGRES_PASSWORD=` | Pehli random line |
    | `JWT_SECRET_KEY=` | Doosri random line |
    | `ADMIN_EMAIL=` | Admin panel ka login email |
    | `ADMIN_PASSWORD=` | Admin panel ka password. Kam se kam 12 characters ka ho. Isay yaad rakhein. |
-   | `SITE_DOMAIN`, `API_DOMAIN` | Pehle se sahi likhe hain, na badlein |
 
    `CHANGE_ME` kahin bhi baaki nahi rehna chahiye.
 
@@ -132,18 +134,65 @@ Chaaron (`db`, `backend`, `frontend`, `caddy`) ke saamne **Up** ya **running** l
 
 ---
 
-## Step 6: Check karein
+## Step 6: Test address par check karein
 
 Browser mein yeh kholein:
 
 1. https://api.eliteescapetourism.com/api/health par `{"status":"ok"}` aana chahiye.
-2. https://eliteescapetourism.com par nayi website khulni chahiye, aur address bar mein 🔒 taala hona chahiye.
-3. https://www.eliteescapetourism.com par bhi website khulni chahiye (yeh khud bina `www` wale address par chala jaata hai).
-4. https://eliteescapetourism.com/admin/login par Step 4 wale email aur password se login karein.
-5. Website par contact form se ek test enquiry bhejein. Woh admin panel ke **Inquiries** mein nazar aani chahiye.
-6. Apne Gmail se `info@eliteescapetourism.com` par ek test email bhejein, taake pakka ho ke email theek chal rahi hai.
+2. https://new.eliteescapetourism.com par nayi website khulni chahiye, aur address bar mein 🔒 taala hona chahiye.
+3. https://new.eliteescapetourism.com/admin/login par Step 4 wale email aur password se login karein. Ek package ya visa country edit karke dekhein ke website par badlav aata hai.
+4. Website par contact form se ek test enquiry bhejein. Woh admin panel ke **Inquiries** mein nazar aani chahiye.
+5. Phone par bhi website khol kar dekhein.
 
 Pehli dafa website par packages 1 minute tak purane (pehle se rakhe hue) nazar aa sakte hain. Phir khud database wale aa jaate hain.
+
+Is poore waqt `eliteescapetourism.com` par purani site chal rahi hai. Kuch theek karna ho to aaram se karein.
+
+---
+
+## Step 7: Asli domain par shift karein
+
+Jab test address par sab theek ho, tab yeh karein.
+
+**A. Server ki settings badlein.** Browser terminal mein:
+
+```
+cd /opt/eliteescape && nano .env.prod
+```
+
+Yeh teen lines badlein (`new.` hata dein), phir **Ctrl + O**, **Enter**, **Ctrl + X**:
+
+| Line | Nayi value |
+| --- | --- |
+| `SITE_DOMAIN=` | `eliteescapetourism.com` |
+| `CORS_ORIGINS=` | `https://eliteescapetourism.com,https://www.eliteescapetourism.com` |
+| `FRONTEND_URL=` | `https://eliteescapetourism.com` |
+
+**B. DNS badlein.** hPanel → **Domains** → `eliteescapetourism.com` → **DNS / Nameservers**:
+
+| Type | Name | Kya karna hai |
+| --- | --- | --- |
+| `A` | `@` | Value mein VPS ka IP likhein |
+| `A` | `www` | VPS ka IP. Agar `www` ka `CNAME` record pehle se hai to use delete karke yeh `A` record banayein. |
+| `AAAA` | `@` aur `www` | **Delete** karein. Yeh purani site ke IPv6 address hain. Rehne diye to kuch logon ko purani site dikhti rahegi. |
+| `A` | `new` aur `www.new` | Ab zaroorat nahi, delete kar sakte hain |
+
+**In ko bilkul na chheren:** `MX`, `TXT`, aur jin records ke naam mein `mail`, `autodiscover`, `autoconfig`, `_dmarc` ya `hostingermail` ho. Yeh sab email ke liye hain.
+
+Agar purani WordPress site par **Hostinger CDN** on hai (website ke Dashboard par "CDN" ka hara nishaan), to DNS badalne se pehle use band kar dein. Warna domain purani site par hi jaata reh sakta hai.
+
+**C. dnschecker.org par `eliteescapetourism.com` ka VPS IP nazar aane ka intezar karein**, phir website dobara banayein:
+
+```
+docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build
+```
+
+**D. Aakhri check:**
+
+1. https://eliteescapetourism.com par nayi website 🔒 ke saath khulni chahiye.
+2. https://www.eliteescapetourism.com khud bina `www` wale address par chala jaana chahiye.
+3. https://eliteescapetourism.com/admin/login par login karein. Test wala data (enquiries waghera) yahin milega, aur use admin panel se delete kar sakte hain.
+4. Apne Gmail se `info@eliteescapetourism.com` par ek test email bhejein, taake pakka ho ke email theek chal rahi hai.
 
 ---
 
@@ -172,7 +221,7 @@ Is ke ilawa hPanel mein VPS ke **Snapshots / Backups** ka option bhi on rakhein.
 | Kya nazar aaya | Kya karein |
 | --- | --- |
 | Website par purani WordPress site hi dikh rahi hai | DNS abhi update nahi hua. dnschecker.org par check karein, `AAAA` records delete kiye hain ya nahi dekhein, aur CDN band kiya hai ya nahi dekhein. Kuch ghante intezar karein. |
-| Browser mein "Not secure" ya certificate ka error | Caddy ko HTTPS lene ke liye DNS ka VPS par point hona zaroori hai. DNS theek karne ke baad yeh chalayein: `docker compose -f docker-compose.prod.yml --env-file .env.prod restart caddy` |
+| Browser mein "Not secure" ya certificate ka error | Caddy ko HTTPS lene ke liye DNS ka VPS par point hona zaroori hai (test ke dauran `new`, `www.new` aur `api` teenon). DNS theek karne ke baad yeh chalayein: `docker compose -f docker-compose.prod.yml --env-file .env.prod restart caddy` |
 | `backend` baar baar restart ho raha hai | Yeh chala kar wajah dekhein: `docker compose -f docker-compose.prod.yml --env-file .env.prod logs backend --tail 50`. Aksar `.env.prod` mein `CHANGE_ME` reh gaya hota hai, ya password 12 characters se chhota hota hai. |
 | Build ke dauran `Killed` ya memory ka error | VPS ki RAM kam hai. Bara plan lein (hPanel mein upgrade ho jaata hai). |
 | Admin login nahi hota | Password sirf **pehli dafa** chalne par save hota hai. Baad mein `.env.prod` mein badalne se login ka password nahi badalta. |

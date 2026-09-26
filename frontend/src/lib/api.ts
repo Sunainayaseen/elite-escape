@@ -1,5 +1,9 @@
 export const API_URL = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000").replace(/\/$/, "");
 
+// A deploy without NEXT_PUBLIC_API_URL (e.g. the site alone on Vercel) has no backend: pages use the
+// bundled content, the contact form hands off to WhatsApp, and the newsletter and dashboard are off.
+export const API_ENABLED = Boolean(process.env.NEXT_PUBLIC_API_URL);
+
 export class ApiError extends Error {
   status: number;
   constructor(message: string, status: number) {
@@ -26,6 +30,7 @@ async function errorMessage(res: Response): Promise<string> {
 
 // Server-side read used by public pages. Cached and revalidated so dashboard edits appear within a minute.
 export async function apiGet<T>(path: string, revalidate = 60): Promise<T> {
+  if (!API_ENABLED) throw new ApiError("No API configured", 0);
   const res = await fetch(`${API_URL}${path}`, { next: { revalidate } });
   if (!res.ok) throw new ApiError(`GET ${path} failed`, res.status);
   return res.json() as Promise<T>;

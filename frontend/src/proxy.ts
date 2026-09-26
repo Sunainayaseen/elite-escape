@@ -11,6 +11,11 @@ export function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
   const path = pathname.replace(/\/+$/, "") || "/";
 
+  // With no backend (site-only deploy) the dashboard has nothing to talk to, so send visitors home.
+  if (!process.env.NEXT_PUBLIC_API_URL) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
   if (!OPEN_PAGES.has(path) && !request.cookies.has(SESSION_COOKIE)) {
     const url = request.nextUrl.clone();
     url.pathname = "/admin/login";

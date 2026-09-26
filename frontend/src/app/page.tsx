@@ -12,6 +12,7 @@ import { Services } from "@/components/home/Services";
 import { Testimonials } from "@/components/home/Testimonials";
 import { TripPlanner } from "@/components/home/TripPlanner";
 import { WhyEliteEscape } from "@/components/home/WhyEliteEscape";
+import { API_ENABLED } from "@/lib/api";
 import { getCategories, getPackages, getSiteSettings } from "@/lib/data";
 import { officesToPoints, packagesToPoints } from "@/lib/geo";
 
@@ -37,7 +38,7 @@ export default async function Home() {
       <WhyEliteEscape offices={settings.offices} />
       <Testimonials />
       <FAQ layout="split" />
-      <Newsletter />
+      {API_ENABLED && <Newsletter />}
       <CTASection />
     </>
   );
