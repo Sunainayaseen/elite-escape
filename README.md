@@ -7,8 +7,7 @@ Travel agency website: a Next.js public site plus a FastAPI + PostgreSQL backend
 | Public site + admin UI | Next.js (App Router), Tailwind CSS v4, Framer Motion | `frontend/` |
 | API | FastAPI, SQLAlchemy 2, Alembic, PostgreSQL | `backend/` |
 | Local infrastructure | Docker Compose | `docker-compose.yml` |
-| Production (API) | Docker Compose + Caddy (automatic HTTPS) on a VPS | `docker-compose.prod.yml`, `deploy/` |
-| Production (site) | Vercel | `frontend/` |
+| Production | Docker Compose + Caddy (automatic HTTPS) on one Hostinger VPS | `docker-compose.prod.yml`, `deploy/`, `frontend/Dockerfile` |
 
 The public pages read their content from the API (packages, categories, visa destinations, blog, site settings) and revalidate every minute, so changes made in the dashboard appear without a redeploy. If the API is unreachable, pages fall back to the bundled content in `frontend/src/lib/site-data.ts` instead of rendering empty.
 
@@ -68,33 +67,36 @@ Frontend variables (`frontend/.env.local.example`): `NEXT_PUBLIC_API_URL`, `NEXT
 
 ## Deployment
 
-### API on the VPS
+Everything runs on one Hostinger VPS: Postgres, the API, the Next.js site and Caddy (automatic HTTPS). A plain-language, step-by-step version for non-developers is in [DEPLOY_GUIDE.md](DEPLOY_GUIDE.md).
 
-1. Point a DNS `A` record for your API hostname (for example `api.eliteescapetourism.com`) at the VPS and open ports 80 and 443.
-2. Install Docker, clone the repository, then:
+1. Point DNS `A` records for `SITE_DOMAIN`, `www.SITE_DOMAIN` and `API_DOMAIN` at the VPS, remove any old `AAAA` records for them, and open ports 80 and 443. Leave the `MX`/`TXT` records alone: company email stays on the Hostinger hosting plan.
+2. Install Docker (at least 4 GB RAM, since the site is built on the server), clone the repository, then:
 
    ```bash
    cp deploy/.env.prod.example .env.prod      # replace every CHANGE_ME and review the rest
    docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build
    ```
 
-3. Check `https://<API_DOMAIN>/api/health` returns `{"status":"ok"}`.
+3. Check `https://<API_DOMAIN>/api/health` returns `{"status":"ok"}` and `https://<SITE_DOMAIN>` serves the site.
+4. If SMTP is set, check email delivery (it prints the exact reason if the mailbox or port rejects it):
 
-Caddy obtains and renews the HTTPS certificate automatically. Postgres data, uploaded images and certificates live in named Docker volumes (`pgdata`, `uploads`, `caddy_data`), so back up at least `pgdata` and `uploads`:
+   ```bash
+   docker compose -f docker-compose.prod.yml --env-file .env.prod exec backend python -m app.send_test_email
+   ```
+
+Caddy obtains and renews the HTTPS certificates automatically and redirects `www` to the bare domain. On the site domain it sends `/api/admin/*` and `/uploads/*` straight to the API (everything else goes to Next.js), so the API's rate limiter sees the visitor's real IP instead of the Next.js server's. Keep `BEHIND_PROXY=true` (already set in `docker-compose.prod.yml`).
+
+The site image (`frontend/Dockerfile`) uses Next.js `output: "standalone"`. `NEXT_PUBLIC_API_URL` and `NEXT_PUBLIC_SITE_URL` are build args derived from the domains in `.env.prod`, so changing a domain needs a rebuild (`--build`). During the first build the API is not up yet, so pages are prerendered from the bundled content and refresh from the API within a minute.
+
+The admin session cookie is `HttpOnly`, `SameSite=Lax` and `Secure` in production, and every write needs the `X-CSRF-Token` header plus an allowed `Origin`. Set `FRONTEND_URL` and `CORS_ORIGINS` to the public site origin.
+
+Postgres data, uploaded images and certificates live in named Docker volumes (`pgdata`, `uploads`, `caddy_data`), so back up at least `pgdata` and `uploads`:
 
 ```bash
-docker compose -f docker-compose.prod.yml --env-file .env.prod exec db pg_dump -U eliteescape eliteescape > backup.sql
+docker compose -f docker-compose.prod.yml --env-file .env.prod exec -T db pg_dump -U eliteescape eliteescape > backup.sql
 ```
 
 To update: `git pull && docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build`. Migrations run automatically on start.
-
-### Site on Vercel
-
-1. Import the repository in Vercel and set the project root to `frontend`.
-2. Set environment variables: `NEXT_PUBLIC_API_URL=https://<API_DOMAIN>`, `NEXT_PUBLIC_SITE_URL=https://<your site>`, plus the optional Google reviews keys.
-3. Deploy, then add your domain. Add the final site origin(s) to `CORS_ORIGINS` in `.env.prod` and restart the API.
-
-The admin dashboard calls same-origin `/api/admin/*` and `/uploads/*`, which Next.js rewrites to the API (destination taken from `NEXT_PUBLIC_API_URL` at build time). The admin session cookie is `HttpOnly`, `SameSite=Lax` and `Secure` in production, and every write needs the `X-CSRF-Token` header plus an allowed `Origin`. Set `FRONTEND_URL` and `CORS_ORIGINS` on the API to the public site origin, and keep `BEHIND_PROXY=true` (already set in `docker-compose.prod.yml`) so the rate limiter sees real client addresses. Uploaded images live in the `uploads` volume.
 
 ## Content integrity
 

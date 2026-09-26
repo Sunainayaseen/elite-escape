@@ -139,7 +139,7 @@ export function Footer({ settings, hasBlog = false }: { settings: SiteSettings; 
 
         <Reveal delay={0.16} className="lg:col-span-3">
           <h2 className="mb-5 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45">
-            Tour Type
+            Tour Types
             <span className="mt-2 block h-0.5 w-8 rounded-full bg-gradient-to-r from-brand-teal-light to-transparent" />
           </h2>
           <ul className="flex flex-col gap-3.5">

@@ -52,6 +52,8 @@ const SECURITY_HEADERS = [
 ];
 
 const nextConfig: NextConfig = {
+  // Self-contained server build for the Docker image (frontend/Dockerfile). `npm run dev` is unaffected.
+  output: "standalone",
   async headers() {
     return [{ source: "/:path*", headers: SECURITY_HEADERS }];
   },

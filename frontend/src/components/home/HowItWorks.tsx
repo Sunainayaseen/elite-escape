@@ -1,76 +1,40 @@
-import { ArrowRight } from "lucide-react";
-import { Fragment } from "react";
-
 import { Reveal } from "@/components/motion/Reveal";
 import { SectionHeader } from "@/components/motion/SectionHeader";
-import { TiltCard } from "@/components/motion/TiltCard";
 import { HOW_IT_WORKS } from "@/lib/site-data";
-
-const STAGGER_Y = ["lg:translate-y-3", "lg:-translate-y-4", "lg:translate-y-3"];
 
 export function HowItWorks() {
   return (
-    <section className="relative overflow-hidden bg-bg-navy/40 py-20 sm:py-28">
-      <div
-        className="pointer-events-none absolute -left-24 top-1/2 h-80 w-80 -translate-y-1/2 rounded-full opacity-40 blur-3xl"
-        style={{ background: "radial-gradient(circle, #EAF2F8 0%, rgba(234,242,248,0) 70%)" }}
-      />
-      <div
-        className="pointer-events-none absolute -right-24 bottom-0 h-72 w-72 rounded-full opacity-40 blur-3xl"
-        style={{ background: "radial-gradient(circle, #E9ECF7 0%, rgba(233,236,247,0) 70%)" }}
-      />
+    <section className="mx-auto max-w-7xl px-6 py-24 sm:py-32">
+      <SectionHeader eyebrow="How it works" title="Three steps to your next trip" />
 
-      <div className="relative mx-auto max-w-7xl px-6">
-        <SectionHeader eyebrow="How it works" title="Three steps to your next trip" />
-
-        <div className="mt-20 flex flex-col gap-10 lg:mt-24 lg:flex-row lg:items-center lg:gap-0">
-          {HOW_IT_WORKS.map((item, i) => {
-            const Icon = item.icon;
-            return (
-              <Fragment key={item.step}>
-                <div className={`lg:flex-1 ${STAGGER_Y[i] ?? ""}`}>
-                  <Reveal delay={i * 0.14} y={36} scale={0.97}>
-                    <TiltCard className="h-full rounded-2xl">
-                      <div className="group relative h-full overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-[#101c30] to-[#080f1c] p-7 shadow-xl shadow-[#080f1c]/20 transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-teal-light/30 hover:shadow-2xl hover:shadow-brand-blue/20">
-                        <span
-                          aria-hidden
-                          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-teal-light/50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                        />
-                        <span
-                          aria-hidden
-                          className="pointer-events-none absolute -right-1 -top-3 font-serif text-6xl font-bold text-white/[0.05] select-none"
-                        >
-                          {item.step}
-                        </span>
-
-                        <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-blue to-brand-navy-accent text-white shadow-lg shadow-brand-blue/40 transition-transform duration-300 group-hover:scale-105">
-                          <Icon size={24} />
-                        </div>
-
-                        <h3 className="relative mt-4 font-serif text-lg font-semibold text-white">
-                          {item.title}
-                        </h3>
-                        <p className="relative mt-2 text-sm leading-relaxed text-white/55">
-                          {item.description}
-                        </p>
-                      </div>
-                    </TiltCard>
-                  </Reveal>
-                </div>
-
-                {i < HOW_IT_WORKS.length - 1 && (
-                  <div className="hidden shrink-0 lg:flex lg:items-center lg:justify-center lg:px-5">
-                    <div className="relative flex h-14 w-14 items-center justify-center">
-                      <span className="absolute inset-0 rounded-full bg-gradient-to-br from-brand-teal-light/30 via-brand-blue/15 to-transparent blur-xl" />
-                      <ArrowRight size={22} className="relative text-brand-blue/60" />
-                    </div>
-                  </div>
-                )}
-              </Fragment>
-            );
-          })}
-        </div>
-      </div>
+      <ol className="relative mt-16 grid grid-cols-1 gap-12 md:grid-cols-3 md:gap-10">
+        {/* Hairline joining the three steps on wide screens */}
+        <span
+          aria-hidden
+          className="absolute left-[16.66%] right-[16.66%] top-7 hidden h-px bg-gradient-to-r from-brand-blue/10 via-brand-blue/40 to-brand-blue/10 md:block"
+        />
+        {HOW_IT_WORKS.map((item, i) => {
+          const Icon = item.icon;
+          return (
+            <li key={item.step} className="relative text-center">
+              <Reveal delay={i * 0.12} y={24}>
+                <span className="relative mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-brand-blue/20 bg-white text-brand-blue-strong shadow-lg shadow-brand-blue/10">
+                  <Icon size={22} aria-hidden />
+                </span>
+                <p className="mt-6 font-serif text-sm italic text-brand-blue-strong">
+                  Step {item.step}
+                </p>
+                <h3 className="mt-1 font-serif text-2xl font-medium tracking-tight text-text-ink">
+                  {item.title}
+                </h3>
+                <p className="mx-auto mt-3 max-w-xs text-sm leading-relaxed text-text-muted">
+                  {item.description}
+                </p>
+              </Reveal>
+            </li>
+          );
+        })}
+      </ol>
     </section>
   );
 }

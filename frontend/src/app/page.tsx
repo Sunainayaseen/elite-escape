@@ -6,12 +6,10 @@ import { ExploreWorld } from "@/components/home/ExploreWorld";
 import { FAQ } from "@/components/home/FAQ";
 import { Hero } from "@/components/home/Hero";
 import { HowItWorks } from "@/components/home/HowItWorks";
-import { LuxuryPackages } from "@/components/home/LuxuryPackages";
 import { Newsletter } from "@/components/home/Newsletter";
-import { ServiceHighlights } from "@/components/home/ServiceHighlights";
+import { PackageShowcase } from "@/components/home/PackageShowcase";
+import { Services } from "@/components/home/Services";
 import { Testimonials } from "@/components/home/Testimonials";
-import { TopExperiences } from "@/components/home/TopExperiences";
-import { TravelStyleTabs } from "@/components/home/TravelStyleTabs";
 import { TripPlanner } from "@/components/home/TripPlanner";
 import { WhyEliteEscape } from "@/components/home/WhyEliteEscape";
 import { getCategories, getPackages, getSiteSettings } from "@/lib/data";
@@ -30,19 +28,16 @@ export default async function Home() {
 
   return (
     <>
-      <Hero />
-      <TripPlanner packages={packages} />
-      <ServiceHighlights />
-      <Categories categories={categories} />
+      <Hero packages={packages} planner={<TripPlanner packages={packages} />} />
+      <Categories categories={categories} packages={packages} />
+      <PackageShowcase categories={categories} packages={packages} />
+      <Services />
       <ExploreWorld points={globePoints} />
-      <TopExperiences categories={categories} packages={packages} />
-      <LuxuryPackages packages={packages} />
       <HowItWorks />
-      <TravelStyleTabs />
-      <WhyEliteEscape />
+      <WhyEliteEscape offices={settings.offices} />
       <Testimonials />
+      <FAQ layout="split" />
       <Newsletter />
-      <FAQ />
       <CTASection />
     </>
   );

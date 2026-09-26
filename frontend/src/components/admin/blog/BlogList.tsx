@@ -79,7 +79,7 @@ export function BlogList() {
         actions={
           <Link
             href="/admin/blog/new"
-            className="inline-flex items-center gap-2 rounded-lg bg-brand-blue px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#2280a8]"
+            className="inline-flex items-center gap-2 rounded-xl bg-[#081a2c] px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-slate-900/10 transition-colors hover:bg-[#12314d]"
           >
             <Plus size={16} />
             New article

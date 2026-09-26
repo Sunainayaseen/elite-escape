@@ -1,3 +1,17 @@
+{$SITE_DOMAIN} {
+	encode zstd gzip
+	# The dashboard's same-origin API calls and uploaded images go straight to the API. Next.js
+	# would rewrite them there too, but that extra hop hides the visitor's IP from the API's login
+	# rate limiter (every request would appear to come from the server itself).
+	@api path /api/admin/* /uploads/*
+	reverse_proxy @api backend:8000
+	reverse_proxy frontend:3000
+}
+
+www.{$SITE_DOMAIN} {
+	redir https://{$SITE_DOMAIN}{uri} permanent
+}
+
 {$API_DOMAIN} {
 	encode gzip
 	header Strict-Transport-Security "max-age=31536000"

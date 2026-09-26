@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Manrope } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
 import { Footer } from "@/components/layout/Footer";
@@ -9,21 +9,28 @@ import { WhatsAppProvider } from "@/components/layout/WhatsAppLink";
 import { MotionProvider } from "@/components/motion/MotionProvider";
 import { SiteChrome } from "@/components/layout/SiteChrome";
 import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
-import { getBlogPosts, getSiteSettings } from "@/lib/data";
+import { getBlogPosts, getPackages, getSiteSettings } from "@/lib/data";
+import { toMenuPackages } from "@/lib/navigation";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { organizationSchema, SITE_DESCRIPTION, SITE_TITLE } from "@/lib/seo";
 import { SITE_URL } from "@/lib/site-url";
 
-const fraunces = Fraunces({
+// Self-hosted variable fonts (latin subset), so builds and dev never depend on reaching Google Fonts.
+const fraunces = localFont({
   variable: "--font-fraunces",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  display: "swap",
+  src: [
+    { path: "./fonts/fraunces.woff2", weight: "400 700", style: "normal" },
+    { path: "./fonts/fraunces-italic.woff2", weight: "400 700", style: "italic" },
+  ],
+  fallback: ["Georgia", "serif"],
 });
 
-const manrope = Manrope({
+const manrope = localFont({
   variable: "--font-manrope",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
+  src: [{ path: "./fonts/manrope.woff2", weight: "400 800", style: "normal" }],
+  fallback: ["Arial", "Helvetica", "sans-serif"],
 });
 
 // Marks the page as script-capable so scroll reveals may hide content until they animate it in.
@@ -51,7 +58,11 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
-  const [settings, posts] = await Promise.all([getSiteSettings(), getBlogPosts()]);
+  const [settings, posts, packages] = await Promise.all([
+    getSiteSettings(),
+    getBlogPosts(),
+    getPackages(),
+  ]);
 
   return (
     <html
@@ -69,7 +80,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         <MotionProvider>
         <WhatsAppProvider number={settings.whatsapp_number}>
         <SiteChrome
-          header={<Header />}
+          header={<Header packages={toMenuPackages(packages)} />}
           footer={<Footer settings={settings} hasBlog={posts.length > 0} />}
           floating={
             <>

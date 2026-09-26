@@ -23,3 +23,9 @@ export function whatsappUrl(number: string, message: string): string | null {
   if (!digits) return null;
   return `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
 }
+
+export function attractionWhatsAppMessage(attraction?: string) {
+  return attraction
+    ? `Hello Elite Escape Tourism, I would like to include ${attraction} in my UAE trip. Please share the options.`
+    : "Hello Elite Escape Tourism, I would like help planning which UAE attractions to include in my trip.";
+}

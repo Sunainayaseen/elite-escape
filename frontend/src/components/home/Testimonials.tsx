@@ -4,6 +4,8 @@ import Image from "next/image";
 import { Parallax } from "@/components/motion/Parallax";
 import { Reveal } from "@/components/motion/Reveal";
 import { SectionHeader } from "@/components/motion/SectionHeader";
+import { Stars } from "@/components/home/GoogleRatingBadge";
+import { formatRating, getRatingSummary } from "@/lib/google-rating";
 import { getGoogleReviews } from "@/lib/google-reviews";
 import { IMG, TESTIMONIALS } from "@/lib/site-data";
 
@@ -26,7 +28,7 @@ type NormalizedReview = {
 };
 
 export async function Testimonials() {
-  const place = await getGoogleReviews();
+  const [place, summary] = await Promise.all([getGoogleReviews(), getRatingSummary()]);
 
   const reviews: NormalizedReview[] = place
     ? place.reviews.slice(0, 6).map((r) => ({
@@ -40,7 +42,7 @@ export async function Testimonials() {
     : TESTIMONIALS.map((t) => ({
         key: t.name,
         name: t.name,
-        subtitle: t.location,
+        subtitle: t.date,
         rating: t.rating,
         quote: t.quote,
       }));
@@ -66,11 +68,11 @@ export async function Testimonials() {
           eyebrow="Traveler stories"
           title="What our travelers say"
           description={
-            place?.rating ? (
-              <p className="text-sm">
-                <span className="font-semibold text-white">{place.rating.toFixed(1)}★</span> on
-                Google
-                {place.user_ratings_total ? ` · ${place.user_ratings_total} reviews` : ""}
+            summary ? (
+              <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm">
+                <Stars rating={summary.rating} />
+                <span>{formatRating(summary)}</span>
+                {summary.asOf && <span className="text-white/50">(as of {summary.asOf})</span>}
               </p>
             ) : undefined
           }
@@ -117,10 +119,10 @@ export async function Testimonials() {
           ))}
         </div>
 
-        {place?.url && (
+        {summary?.url && (
           <div className="mt-10 text-center">
             <a
-              href={place.url}
+              href={summary.url}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 text-sm font-medium text-brand-teal-light transition-colors hover:text-white"

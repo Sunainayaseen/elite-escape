@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader2, Search } from "lucide-react";
+import { AlertCircle, Loader2, Search } from "lucide-react";
 import type {
   ButtonHTMLAttributes,
   InputHTMLAttributes,
@@ -15,8 +15,10 @@ import { cn } from "@/lib/utils";
 // ---- Buttons ---------------------------------------------------------------------------
 
 const BTN_VARIANTS = {
-  primary: "bg-brand-blue text-white hover:bg-[#2280a8] shadow-sm disabled:bg-brand-blue/50",
-  secondary: "border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 disabled:text-slate-400",
+  primary:
+    "bg-[#081a2c] text-white shadow-sm shadow-slate-900/10 hover:bg-[#12314d] disabled:bg-slate-300 disabled:shadow-none",
+  secondary:
+    "border border-slate-200 bg-white text-slate-700 shadow-sm shadow-slate-900/5 hover:border-slate-300 hover:bg-slate-50 disabled:text-slate-400",
   danger: "bg-red-600 text-white hover:bg-red-700 shadow-sm disabled:bg-red-300",
   ghost: "text-slate-600 hover:bg-slate-100 disabled:text-slate-300",
 } as const;
@@ -42,8 +44,8 @@ export function Btn({
       type={type}
       disabled={disabled || loading}
       className={cn(
-        "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg font-semibold transition-colors disabled:cursor-not-allowed",
-        size === "sm" ? "px-3 py-1.5 text-xs" : "px-4 py-2 text-sm",
+        "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl font-semibold transition-all duration-150 active:scale-[0.98] disabled:cursor-not-allowed disabled:active:scale-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue",
+        size === "sm" ? "px-3 py-1.5 text-xs" : "px-4 py-2.5 text-sm",
         BTN_VARIANTS[variant],
         className,
       )}
@@ -58,7 +60,7 @@ export function Btn({
 // ---- Form controls ---------------------------------------------------------------------
 
 export const inputCls =
-  "w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-brand-blue focus:outline-none focus:ring-2 focus:ring-brand-blue/20 disabled:bg-slate-50 disabled:text-slate-500";
+  "w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm shadow-slate-900/[0.03] transition-colors placeholder:text-slate-400 hover:border-slate-300 focus:border-brand-blue focus:outline-none focus:ring-4 focus:ring-brand-blue/10 disabled:bg-slate-50 disabled:text-slate-500";
 
 export function Field({
   label,
@@ -99,7 +101,7 @@ export function TextArea({ className, ...props }: TextareaHTMLAttributes<HTMLTex
 
 export function Select({ className, children, ...props }: SelectHTMLAttributes<HTMLSelectElement>) {
   return (
-    <select className={cn(inputCls, "pr-8", className)} {...props}>
+    <select className={cn(inputCls, "ui-select pr-8", className)} {...props}>
       {children}
     </select>
   );
@@ -169,6 +171,19 @@ export function SearchInput({
   );
 }
 
+/** Inline form error, announced to screen readers. */
+export function FormAlert({ children }: { children: ReactNode }) {
+  return (
+    <div
+      role="alert"
+      className="flex items-start gap-2.5 rounded-xl border border-red-200 bg-red-50 px-3.5 py-3 text-sm text-red-800"
+    >
+      <AlertCircle size={16} aria-hidden className="mt-0.5 shrink-0 text-red-500" />
+      <span>{children}</span>
+    </div>
+  );
+}
+
 // ---- Layout pieces ---------------------------------------------------------------------
 
 export function PageHeader({
@@ -181,9 +196,9 @@ export function PageHeader({
   actions?: ReactNode;
 }) {
   return (
-    <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+    <div className="mb-7 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div>
-        <h1 className="font-sans! text-2xl font-bold tracking-tight text-slate-900">{title}</h1>
+        <h1 className="font-sans! text-[1.65rem] font-bold tracking-tight text-slate-900">{title}</h1>
         {description && <p className="mt-1 max-w-2xl text-sm text-slate-500">{description}</p>}
       </div>
       {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
@@ -205,7 +220,9 @@ export function Card({
   children: ReactNode;
 }) {
   return (
-    <section className={cn("rounded-xl border border-slate-200 bg-white shadow-sm", className)}>
+    <section
+      className={cn("rounded-2xl border border-slate-200/80 bg-white shadow-sm shadow-slate-900/[0.03]", className)}
+    >
       {(title || actions) && (
         <div className="flex items-start justify-between gap-3 border-b border-slate-100 px-5 py-4">
           <div>
@@ -320,7 +337,7 @@ export function Tabs<T extends string>({
           onClick={() => onChange(tab.value)}
           className={cn(
             "flex shrink-0 items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors",
-            value === tab.value ? "bg-slate-900 text-white" : "text-slate-600 hover:bg-slate-100",
+            value === tab.value ? "bg-[#081a2c] text-white shadow-sm" : "text-slate-600 hover:bg-white hover:shadow-sm",
           )}
         >
           {tab.label}

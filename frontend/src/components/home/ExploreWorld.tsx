@@ -45,7 +45,7 @@ export function ExploreWorld({ points }: { points: readonly GlobePoint[] }) {
             description="Drag the globe to explore, then select a pin to open that package."
           />
 
-          <ul className="mt-8 flex flex-col gap-2">
+          <ul className="mt-8 grid grid-cols-1 gap-2 sm:grid-cols-2">
             {destinations.map((p, i) => (
               <li key={p.id}>
                 <Reveal delay={i * 0.06} y={16}>

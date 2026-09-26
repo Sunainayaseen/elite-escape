@@ -1,6 +1,16 @@
+import type { Metadata } from "next";
 import { Compass } from "lucide-react";
 
 import { Button } from "@/components/ui/Button";
+
+// Without this the page inherits the root layout's `canonical: "./"`, and because the 404 page is
+// rendered once and reused, every missing URL (including old WordPress spam URLs) pointed its
+// canonical at whichever URL 404'd first.
+export const metadata: Metadata = {
+  title: "Page not found | Elite Escape Tourism",
+  alternates: { canonical: null },
+  robots: { index: false, follow: true },
+};
 
 export default function NotFound() {
   return (

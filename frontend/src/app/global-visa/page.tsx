@@ -2,13 +2,12 @@ import type { Metadata } from "next";
 
 import { CTASection } from "@/components/home/CTASection";
 import { FAQ } from "@/components/home/FAQ";
-import { PageHero } from "@/components/layout/PageHero";
 import { WhatsAppLink } from "@/components/layout/WhatsAppLink";
 import { Reveal } from "@/components/motion/Reveal";
 import { SectionHeader } from "@/components/motion/SectionHeader";
 import { TiltCard } from "@/components/motion/TiltCard";
 import { VisaExplorer } from "@/components/visa/VisaExplorer";
-import { VisaStamps } from "@/components/visa/VisaStamps";
+import { VisaHero } from "@/components/visa/VisaHero";
 import { getVisaCountries } from "@/lib/data";
 import { visaWhatsAppMessage } from "@/lib/whatsapp";
 import { pageMetadata } from "@/lib/seo";
@@ -83,12 +82,7 @@ export default async function GlobalVisaPage() {
 
   return (
     <>
-      <PageHero
-        eyebrow="Visa Assistance"
-        title="Visa Assistance Made Simpler"
-        description="From document preparation to application guidance, our team helps make your visa journey clearer and more organized."
-        decor={<VisaStamps />}
-      />
+      <VisaHero countries={countries} />
 
       <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
         <h2 className="sr-only">How visa assistance works</h2>
@@ -96,17 +90,24 @@ export default async function GlobalVisaPage() {
           {STEPS.map((item, i) => (
             <Reveal key={item.step} delay={i * 0.1}>
               <TiltCard className="h-full rounded-2xl">
-                <div
-                  data-step={item.step}
-                  className="relative h-full overflow-hidden rounded-2xl border border-line/10 bg-white p-7 shadow-sm shadow-brand-blue/5 before:pointer-events-none before:absolute before:-right-1 before:-top-3 before:select-none before:font-serif before:text-6xl before:font-bold before:text-bg-navy-light/70 before:content-[attr(data-step)]"
-                >
-                  <p className="relative text-xs font-semibold tracking-[0.2em] text-brand-blue-strong">
-                    STEP {item.step}
-                  </p>
-                  <h3 className="relative mt-2 font-serif text-lg font-semibold text-text-ink">
+                <div className="relative h-full overflow-hidden rounded-2xl border border-line/10 bg-white p-7 shadow-sm shadow-brand-blue/5">
+                  {/* The big numeral shares the top row with the label, inside the padding, so it
+                      can never spill past the card edge or run into the heading. */}
+                  <div className="flex items-start justify-between gap-4">
+                    <p className="pt-1.5 text-xs font-semibold tracking-[0.2em] text-brand-blue-strong">
+                      STEP {item.step}
+                    </p>
+                    <span
+                      aria-hidden
+                      className="select-none font-serif text-5xl font-bold leading-none text-bg-navy-light"
+                    >
+                      {item.step}
+                    </span>
+                  </div>
+                  <h3 className="mt-3 font-serif text-lg font-semibold text-text-ink">
                     {item.title}
                   </h3>
-                  <p className="relative mt-2 text-sm leading-relaxed text-text-muted">
+                  <p className="mt-2 text-sm leading-relaxed text-text-muted">
                     {item.description}
                   </p>
                 </div>
@@ -145,7 +146,7 @@ export default async function GlobalVisaPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
+      <section id="destinations" className="scroll-mt-24 mx-auto max-w-7xl px-6 py-16 sm:py-20">
         <SectionHeader
           eyebrow="Destinations"
           title="Where we can help"

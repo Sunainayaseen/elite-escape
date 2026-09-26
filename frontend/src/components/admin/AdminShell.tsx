@@ -40,16 +40,49 @@ export function useAdmin(): AdminContextValue {
   return ctx;
 }
 
-const NAV = [
-  { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
-  { href: "/admin/packages", label: "Holiday Packages", icon: Briefcase },
-  { href: "/admin/destinations", label: "Destinations", icon: MapPin },
-  { href: "/admin/visa", label: "Visa Assistance", icon: Stamp },
-  { href: "/admin/inquiries", label: "Inquiries", icon: Inbox, badge: true },
-  { href: "/admin/blog", label: "Blog", icon: Newspaper },
-  { href: "/admin/media", label: "Media", icon: ImageIcon },
-  { href: "/admin/settings", label: "Settings", icon: Settings },
-] as const;
+type NavItem = {
+  href: string;
+  label: string;
+  icon: typeof LayoutDashboard;
+  exact?: boolean;
+  badge?: boolean;
+};
+
+// Grouped the way staff think about the work: day-to-day enquiries, website content, then setup.
+const NAV_GROUPS: { title: string; items: NavItem[] }[] = [
+  {
+    title: "Overview",
+    items: [
+      { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
+      { href: "/admin/inquiries", label: "Inquiries", icon: Inbox, badge: true },
+    ],
+  },
+  {
+    title: "Content",
+    items: [
+      { href: "/admin/packages", label: "Holiday Packages", icon: Briefcase },
+      { href: "/admin/destinations", label: "Destinations", icon: MapPin },
+      { href: "/admin/visa", label: "Visa Assistance", icon: Stamp },
+      { href: "/admin/blog", label: "Blog", icon: Newspaper },
+      { href: "/admin/media", label: "Media", icon: ImageIcon },
+    ],
+  },
+  { title: "System", items: [{ href: "/admin/settings", label: "Settings", icon: Settings }] },
+];
+
+const NAV = NAV_GROUPS.flatMap((group) => group.items);
+
+const isActive = (item: NavItem, pathname: string) =>
+  item.exact ? pathname === item.href : pathname.startsWith(item.href);
+
+function initialsOf(name: string) {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0]!.toUpperCase())
+    .join("");
+}
 
 export function AdminShell({ children }: { children: ReactNode }) {
   const router = useRouter();
@@ -120,7 +153,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
 
   if (loadError) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-3 px-6 text-center">
+      <div className="flex min-h-screen flex-col items-center justify-center gap-3 bg-[#f5f7fa] px-6 text-center font-sans!">
         <p className="text-sm font-semibold text-red-700">Could not reach the server</p>
         <p className="max-w-md text-sm text-slate-500">{loadError}</p>
         <Btn variant="secondary" onClick={() => window.location.reload()}>
@@ -131,73 +164,117 @@ export function AdminShell({ children }: { children: ReactNode }) {
   }
   if (!user) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-[#f5f7fa] font-sans!">
         <Spinner label="Checking your session…" />
       </div>
     );
   }
 
+  const current = NAV.find((item) => isActive(item, pathname));
+  const initials = initialsOf(user.name);
+
   const nav = (
-    <nav aria-label="Admin" className="flex flex-1 flex-col gap-1 px-3 py-4">
-      {NAV.map((item) => {
-        const active = "exact" in item && item.exact ? pathname === item.href : pathname.startsWith(item.href);
-        const Icon = item.icon;
-        return (
-          <Link
-            key={item.href}
-            href={item.href}
-            onClick={() => setMenuOpen(false)}
-            aria-current={active ? "page" : undefined}
-            className={cn(
-              "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
-              active ? "bg-white/10 text-white" : "text-slate-300 hover:bg-white/5 hover:text-white",
-            )}
-          >
-            <Icon size={18} className={active ? "text-brand-teal" : "text-slate-400"} />
-            <span className="flex-1">{item.label}</span>
-            {"badge" in item && item.badge && newCount > 0 && (
-              <span className="rounded-full bg-brand-teal px-2 py-0.5 text-[11px] font-bold leading-none text-slate-900">
-                {newCount}
-              </span>
-            )}
-          </Link>
-        );
-      })}
-      <button
-        type="button"
-        onClick={logout}
-        className="mt-auto flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-300 transition-colors hover:bg-white/5 hover:text-white"
-      >
-        <LogOut size={18} className="text-slate-400" />
-        Logout
-      </button>
+    <nav aria-label="Admin" className="flex flex-1 flex-col gap-6 overflow-y-auto px-3 py-5">
+      {NAV_GROUPS.map((group) => (
+        <div key={group.title}>
+          <p className="px-3 pb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+            {group.title}
+          </p>
+          <ul className="flex flex-col gap-0.5">
+            {group.items.map((item) => {
+              const active = isActive(item, pathname);
+              const Icon = item.icon;
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    onClick={() => setMenuOpen(false)}
+                    aria-current={active ? "page" : undefined}
+                    className={cn(
+                      "group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
+                      active ? "bg-white/[0.08] text-white" : "text-slate-400 hover:bg-white/[0.04] hover:text-white",
+                    )}
+                  >
+                    {/* Neon rail marks the current page */}
+                    {active && (
+                      <span
+                        aria-hidden
+                        className="absolute -left-3 top-1/2 h-5 w-1 -translate-y-1/2 rounded-r-full bg-[#67e8f9] shadow-[0_0_12px_rgba(103,232,249,0.7)]"
+                      />
+                    )}
+                    <Icon
+                      size={18}
+                      aria-hidden
+                      className={active ? "text-[#67e8f9]" : "text-slate-500 group-hover:text-slate-300"}
+                    />
+                    <span className="flex-1">{item.label}</span>
+                    {item.badge && newCount > 0 && (
+                      <span className="rounded-full bg-[#67e8f9] px-2 py-0.5 text-[11px] font-bold leading-none text-[#04121f]">
+                        {newCount}
+                        <span className="sr-only"> new</span>
+                      </span>
+                    )}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ))}
     </nav>
   );
 
-  const brand = (
-    <div className="flex h-16 shrink-0 items-center gap-3 border-b border-white/10 px-5">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/logo.svg" alt="Elite Escape" className="h-8 w-auto rounded bg-white px-1.5 py-0.5" />
-      <span className="text-xs font-semibold uppercase tracking-widest text-slate-400">Admin</span>
-    </div>
+  const sidebar = (
+    <>
+      <div className="flex h-16 shrink-0 items-center gap-3 px-6">
+        {/* eslint-disable-next-line @next/next/no-img-element -- tiny static SVG */}
+        <img src="/logo-mark.svg" alt="" className="h-8 w-auto" />
+        <div className="leading-none">
+          <p className="text-sm font-semibold text-white">Elite Escape</p>
+          <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">Admin</p>
+        </div>
+      </div>
+      {nav}
+      <div className="m-3 flex items-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.04] p-3">
+        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-gradient-to-br from-[#67e8f9] to-brand-blue text-xs font-bold text-[#04121f]">
+          {initials}
+        </span>
+        <div className="min-w-0 flex-1 leading-tight">
+          <p className="truncate text-sm font-semibold text-white">{user.name}</p>
+          <p className="truncate text-xs capitalize text-slate-500">{user.role}</p>
+        </div>
+        <button
+          type="button"
+          onClick={logout}
+          aria-label="Log out"
+          title="Log out"
+          className="rounded-lg p-2 text-slate-400 transition-colors hover:bg-white/10 hover:text-white"
+        >
+          <LogOut size={16} aria-hidden />
+        </button>
+      </div>
+    </>
   );
 
   return (
     <AdminContext.Provider
       value={{ user, isAdmin: user.role === "admin", logout, refreshBadge: () => setBadgeNonce((n) => n + 1) }}
     >
-      <div className="min-h-screen bg-slate-100 font-sans! text-slate-900">
+      <div className="min-h-screen bg-[#f5f7fa] font-sans! text-slate-900">
         {/* Desktop sidebar */}
-        <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col bg-[#0F1B2B] lg:flex">
-          {brand}
-          {nav}
+        <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-white/[0.04] bg-[#081a2c] lg:flex">
+          {sidebar}
         </aside>
 
         {/* Mobile / tablet drawer */}
         {menuOpen && (
           <div className="fixed inset-0 z-40 lg:hidden">
-            <div className="absolute inset-0 bg-slate-900/60" onClick={() => setMenuOpen(false)} aria-hidden />
-            <aside className="relative flex h-full w-72 max-w-[85vw] flex-col bg-[#0F1B2B]">
+            <div
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+              onClick={() => setMenuOpen(false)}
+              aria-hidden
+            />
+            <aside className="relative flex h-full w-72 max-w-[85vw] flex-col bg-[#081a2c]">
               <button
                 type="button"
                 aria-label="Close menu"
@@ -206,42 +283,45 @@ export function AdminShell({ children }: { children: ReactNode }) {
               >
                 <X size={18} />
               </button>
-              {brand}
-              {nav}
+              {sidebar}
             </aside>
           </div>
         )}
 
         <div className="lg:pl-64">
-          <header className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-slate-200 bg-white/90 px-4 backdrop-blur sm:px-6">
+          <header className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-slate-200/70 bg-[#f5f7fa]/85 px-4 backdrop-blur-md sm:px-8">
             <button
               type="button"
               aria-label="Open menu"
               onClick={() => setMenuOpen(true)}
-              className="rounded-lg p-2 text-slate-600 hover:bg-slate-100 lg:hidden"
+              className="rounded-lg p-2 text-slate-600 hover:bg-white lg:hidden"
             >
               <Menu size={20} />
             </button>
+            <p className="flex min-w-0 items-center gap-2 text-sm text-slate-500">
+              <span className="hidden sm:inline">Admin</span>
+              <span aria-hidden className="hidden text-slate-300 sm:inline">
+                /
+              </span>
+              <span className="truncate font-semibold text-slate-900">{current?.label ?? "Dashboard"}</span>
+            </p>
             <div className="flex-1" />
             <a
               href="/"
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium text-slate-600 hover:bg-slate-100 sm:flex"
+              className="hidden items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-sm font-medium text-slate-700 shadow-sm shadow-slate-900/5 transition-colors hover:border-slate-300 sm:flex"
             >
-              View website <ExternalLink size={14} />
+              View website <ExternalLink size={14} aria-hidden />
             </a>
-            <div className="flex items-center gap-2.5 border-l border-slate-200 pl-3">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-blue text-sm font-bold text-white">
-                {user.name.slice(0, 1).toUpperCase()}
-              </span>
-              <div className="hidden leading-tight sm:block">
-                <p className="text-sm font-semibold text-slate-800">{user.name}</p>
-                <p className="text-xs capitalize text-slate-500">{user.role}</p>
-              </div>
-            </div>
+            <span
+              aria-hidden
+              className="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-[#67e8f9] to-brand-blue text-xs font-bold text-[#04121f] lg:hidden"
+            >
+              {initials}
+            </span>
           </header>
-          <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">{children}</main>
+          <main className="mx-auto max-w-7xl px-4 py-7 sm:px-8 sm:py-9">{children}</main>
         </div>
       </div>
     </AdminContext.Provider>

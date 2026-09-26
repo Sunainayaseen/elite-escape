@@ -23,13 +23,12 @@ export function ImageReveal({
   }, []);
 
   return (
-    <div
-      ref={ref}
-      data-reveal-img
-      style={{ "--rd": `${delay}s` } as React.CSSProperties}
-      className={cn("overflow-hidden", className)}
-    >
-      <div className="reveal-img-inner h-full w-full">{children}</div>
+    // The observed element must stay unclipped: Chrome's IntersectionObserver honours the target's
+    // own clip-path, so a fully clipped target never reports as intersecting and never reveals.
+    <div ref={ref} data-reveal-img style={{ "--rd": `${delay}s` } as React.CSSProperties}>
+      <div className={cn("reveal-img-clip overflow-hidden", className)}>
+        <div className="reveal-img-inner h-full w-full">{children}</div>
+      </div>
     </div>
   );
 }

@@ -1,10 +1,15 @@
 import {
+  Building2,
   Compass,
+  Flag,
+  Heart,
   Landmark,
   Mountain,
   Palmtree,
   PlaneTakeoff,
   SlidersHorizontal,
+  TreePine,
+  Users,
 } from "lucide-react";
 
 export const NAV_LINKS = [
@@ -359,11 +364,22 @@ export const HOW_IT_WORKS = [
   },
 ] as const;
 
-// Testimonials are intentionally empty. Only genuine, owner-approved reviews
-// may be added here; the home page pulls real Google reviews when configured.
+// The business's real Google rating, copied by the owner from their Google Business Profile.
+// Leave it null until the owner supplies it: nothing rating-related renders while it's null.
+// `asOf` is shown next to the figure, because a copied rating goes stale ("Sept 2026").
+// If GOOGLE_PLACES_API_KEY + GOOGLE_PLACE_ID are set, live Google data replaces this.
+export const GOOGLE_RATING: {
+  rating: number;
+  count: number;
+  url: string;
+  asOf: string;
+} | null = null;
+
+// Genuine reviews only, copied word for word from the Google profile with the owner's approval.
+// Never write, edit or paraphrase a review. `date` is the review's date as shown on Google.
 export const TESTIMONIALS: readonly {
   name: string;
-  location: string;
+  date: string;
   quote: string;
   rating: number;
 }[] = [];
@@ -406,10 +422,16 @@ export const FOOTER_QUICK_LINKS = [
   { label: "Contact Us", href: "/contact" },
 ] as const;
 
+// The tour types used on the packages; each links to the holidays search, which matches tour types.
+const tourTypeHref = (type: string) => `/holidays?q=${encodeURIComponent(type)}`;
+
 export const FOOTER_TOUR_TYPES = [
-  { label: "Asia", href: "/holidays/asia", icon: Palmtree },
-  { label: "Europe", href: "/holidays/europe", icon: Landmark },
-  { label: "Caucasus", href: "/holidays/caucasus", icon: Mountain },
+  { label: "Adventure", href: tourTypeHref("Adventure"), icon: Mountain },
+  { label: "City Tour", href: tourTypeHref("City Tour"), icon: Building2 },
+  { label: "Couple", href: tourTypeHref("Couple"), icon: Heart },
+  { label: "Escorted Tour", href: tourTypeHref("Escorted Tour"), icon: Flag },
+  { label: "Family", href: tourTypeHref("Family"), icon: Users },
+  { label: "Hill Town", href: tourTypeHref("Hill Town"), icon: TreePine },
 ] as const;
 
 export const OFFICES = [
@@ -434,48 +456,70 @@ export const WORKING_HOURS = "Working Days: Monday – Friday (9AM – 5PM)";
 
 // Source: the UAE Attractions page on eliteescapetourism.com. Descriptions of landmarks are kept
 // neutral; do not add prices, tickets or "book now" claims the business has not published.
-// `image: null` = Client Information Required (no verified photo yet); the page shows a fallback tile.
+// Photos are Unsplash-licensed shots of each actual place (checked by eye, Sept 2026) until the
+// client supplies their own. `city` and `kind` drive the filter and
+// the card labels; the order puts the strongest image first, since it becomes the featured card.
 export const ATTRACTIONS = [
   {
+    name: "Burj Khalifa",
+    city: "Dubai",
+    kind: "Landmark",
+    description: "The centrepiece of Dubai's skyline.",
+    image:
+      "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1400&q=80",
+  },
+  {
     name: "Museum of the Future",
+    city: "Dubai",
+    kind: "Landmark",
     description: "One of Dubai's most recognisable modern landmarks.",
-    image: null,
+    image:
+      "https://images.unsplash.com/photo-1686918269961-507270a5a238?auto=format&fit=crop&w=1400&q=80",
   },
   {
     name: "Sheikh Zayed Grand Mosque",
+    city: "Abu Dhabi",
+    kind: "Culture",
     description: "Abu Dhabi's landmark mosque, known for its white marble architecture.",
     image:
-      "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    name: "Burj Khalifa",
-    description: "The centrepiece of Dubai's skyline.",
-    image:
-      "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?auto=format&fit=crop&w=1400&q=80",
   },
   {
     name: "The Dubai Frame",
+    city: "Dubai",
+    kind: "Landmark",
     description: "A frame-shaped landmark that looks across old and new Dubai.",
-    image: null,
+    image:
+      "https://images.unsplash.com/photo-1746728789560-fb82058ae005?auto=format&fit=crop&w=1400&q=80",
   },
   {
     name: "Louvre Abu Dhabi",
+    city: "Abu Dhabi",
+    kind: "Culture",
     description: "A cultural landmark and museum in Abu Dhabi.",
-    image: null,
+    image:
+      "https://images.unsplash.com/photo-1755114421815-873d0755faae?auto=format&fit=crop&w=1400&q=80",
   },
   {
     name: "Dhow Cruise, Dubai Marina",
+    city: "Dubai",
+    kind: "Experience",
     description: "A traditional dhow cruise along Dubai Marina.",
-    image: null,
+    image:
+      "https://images.unsplash.com/photo-1778008452928-8da3c5b9b9cd?auto=format&fit=crop&w=1400&q=80",
   },
   {
     name: "Desert Safari",
+    city: "Dubai",
+    kind: "Experience",
     description:
       "Dune bashing in a 4x4, camel rides, sandboarding, Bedouin-style camping, BBQ dining, belly dancing and Tanoura dance performances.",
     image:
-      "https://images.unsplash.com/photo-1638024510305-c36fcc0bf3b1?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1638024510305-c36fcc0bf3b1?auto=format&fit=crop&w=1400&q=80",
   },
 ] as const;
+
+export type Attraction = (typeof ATTRACTIONS)[number];
 
 // Source: the Seasonal Packages page on eliteescapetourism.com. The live site lists no prices or
 // durations for these — they are enquiry-only. Entries with a matching published package link to
