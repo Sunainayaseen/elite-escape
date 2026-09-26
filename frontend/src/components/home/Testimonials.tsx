@@ -78,9 +78,16 @@ export async function Testimonials() {
           }
         />
 
-        <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Flex, not grid, so one or two reviews sit centred instead of hugging the left edge */}
+        <div className="mt-14 flex flex-wrap justify-center gap-6">
           {reviews.map((r, i) => (
-            <Reveal key={r.key} delay={(i % 3) * 0.08} y={32} scale={0.98}>
+            <Reveal
+              key={r.key}
+              delay={(i % 3) * 0.08}
+              y={32}
+              scale={0.98}
+              className="w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc((100%-3rem)/3)]"
+            >
               <div className="flex h-full flex-col rounded-2xl border border-white/15 bg-white/10 p-6 shadow-lg shadow-black/10 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-white/30 hover:bg-white/[0.14]">
                 <div className="flex gap-1 text-gold">
                   {Array.from({ length: 5 }).map((_, idx) => (
